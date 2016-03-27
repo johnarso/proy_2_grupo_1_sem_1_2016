@@ -47,7 +47,7 @@ module controlRST(
 	 output reg segcr,
 	 output tim
     );
-wire ENch,ENcf,ENcc,ENgh,ENgf,ENgc,ENed;
+wire ENch,ENcf,ENcc,ENgh,ENgf,ENgc,ENed,ENcfor,ENci,ENlo,lck;
 wire h,m,s,dia,mes,year,hcr,mcr,scr,ap;
 wire Hcc,Mcc,Scc;
 wire Hc,Mc,Sc,ampm;
@@ -56,8 +56,9 @@ wire arriba,abajo,izq,der,fmt,ph,pf,pc,ic;
 
 inicializacion instini(.clock(clk),.reset(rst),.cs(cs),.ad(ad),.rd(rd),.wr(wr),.ADout(AD) );
 
-chcronoformatlock instchcrfolo(.clock(clk),.reset(rst),.enc(), //MODIFICAR MODULO
-										.enf(),.enl(),.ad(ad),.wr(wr),.cs(cs),
+chcronoformatlock instchcrfolo(.clock(clk),.reset(rst),.enc(ENci), //MODIFICAR MODULO
+										.enf(ENcfor),.enl(ENlo),.inic(SWiniC),.format(SWf),.lock(lck),
+										.ad(ad),.wr(wr),.cs(cs),
 										.rd(rd),.ADout(AD) );
 
 FFs instFFs(.aumentar(up),.disminuir(dwn),.left(lf),.right(rg),.format(SWf),
@@ -67,7 +68,8 @@ FFs instFFs(.aumentar(up),.disminuir(dwn),.left(lf),.right(rg),.format(SWf),
 control instcontrol(.clock(clk),.reset(rst),.Phora(ph),.Pfecha(pf),.Pcrono(pc),
 							.cronoini(SWiniC),.format(SWf),
 						.ENchora(ENch),.ENcfecha(ENcf),.ENccrono(ENcc),.ENghora(ENgh),
-						.ENgfecha(ENgf),.ENgcrono(ENgc),.ENedatos(ENed));
+						.ENgfecha(ENgf),.ENgcrono(ENgc),.ENedatos(ENed),
+						.ENcformat(ENcfor),.ENcinic(ENci),.ENlock(ENlo),.lock(lck)	);
 
 Ext_datos instExt_datos(.ADin(AD),.clock(clk),.reset(rst),.chs(ENed),
 								.ADout(AD),.ad(ad),.wr(wr),.rd(rd),.cs(cs),.hora(h),.min(m),
@@ -95,7 +97,7 @@ Ghora instGhora(.hora(Hc),.min(Mc),.seg(Sc),.AmPm(ampm),.clock(clk),.reset(rst),
 						.ADout(AD),.ad(ad),.wr(cs),.rd(rd),.cs(cs) );
 always @(posedge clk)
 begin
-if (reset)
+if (rst)
 begin
 	hora<=0;
 	min<=0;

@@ -35,11 +35,14 @@ module control(
     output reg ENedatos,
 	 output reg ENcformat,
 	 output reg ENcinic,
-	 output reg ENlock
+	 output reg ENlock,
+	 output reg lock
     );
 reg [9:0]contador;
 reg crini;
 reg form;
+reg Phoraref;
+reg Pfecharef;
 always @(posedge clock)
 	begin
 	if (reset)
@@ -54,14 +57,42 @@ always @(posedge clock)
 		contador<=0;
 		crini<=0;
 		form<=0;
+		Phoraref<=0;
+		Pfecharef<=0;
+		ENcformat<=0;
+		ENcinic<=0;
+		ENlock<=0;
 	end
 	else
 	begin
 	if (contador==32)
 		begin
-		if (cronoini!=crini)ENcinic<=1;
-		if (Phora==1||Pfecha==1)ENlock<=1;
-		if (format!=form)ENcinic<=1;
+		if (cronoini!=crini)
+		begin
+			ENcinic<=1;
+			crini<=cronoini;
+		end
+		if (Phora!=Phoraref||Pfecha!=Pfecharef)
+		begin
+		if (Phora==1||Pfecha==1)
+			begin
+				ENlock<=1;
+				lock<=1;
+			end
+		else if (Phora==0 && Pfecha==0)
+			begin
+				ENlock<=1;
+				lock<=0;
+			end
+			Phoraref<=Phora;
+			Pfecharef<=Pfecha;
+		end
+		
+		if (format!=form)
+		begin 
+			ENcinic<=1;
+			form<=format;
+		end
 		contador<=contador+1;
 		end
 		

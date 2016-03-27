@@ -24,6 +24,9 @@ module chcronoformatlock(
 	 input enc,
 	 input enf,
 	 input enl,
+	 input inic,
+	 input format,
+	 input lock,
     output reg ad,
     output reg wr,
     output reg cs,
@@ -127,9 +130,9 @@ begin
 		ADout[0]<=0;
 		ADout[1]<=0;
 		ADout[2]<=0;
-		ADout[3]<=encr;
-		ADout[4]<=enfor;
-		ADout[5]<=enlo;
+		ADout[3]<=inic;
+		ADout[4]<=format;
+		ADout[5]<=lock;
 		ADout[6]<=0;
 		ADout[7]<=0;
 		cont<=cont+1;

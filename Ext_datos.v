@@ -55,6 +55,7 @@ begin
 	cs<=1'hz;
 	ADout<=8'hzz;
 	cont<=0;
+	AmPm<=0;
 	contadd<=0;
 	hora<=0;
 	min<=0;
