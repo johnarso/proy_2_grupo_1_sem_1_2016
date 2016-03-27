@@ -24,16 +24,22 @@ module control(
 	 input Phora,
 	 input Pfecha,
 	 input Pcrono,
+	 input cronoini,
+	 input format,
     output reg ENchora,
     output reg ENcfecha,
     output reg ENccrono,
     output reg ENghora,
     output reg ENgfecha,
     output reg ENgcrono,
-    output reg ENedatos
+    output reg ENedatos,
+	 output reg ENcformat,
+	 output reg ENcinic,
+	 output reg ENlock
     );
 reg [9:0]contador;
-
+reg crini;
+reg form;
 always @(posedge clock)
 	begin
 	if (reset)
@@ -46,21 +52,32 @@ always @(posedge clock)
 		ENgcrono<=0;
 		ENedatos<=0;
 		contador<=0;
-		
+		crini<=0;
+		form<=0;
 	end
 	else
 	begin
-		if (contador==0)
+	if (contador==32)
+		begin
+		if (cronoini!=crini)ENcinic<=1;
+		if (Phora==1||Pfecha==1)ENlock<=1;
+		if (format!=form)ENcinic<=1;
+		contador<=contador+1;
+		end
+		
+		else if (contador==62)
 		begin
 		ENedatos<=1;
 		contador<=contador+1;
 		end
-		else if(contador==3)
+		
+		else if(contador==65)
 		begin
 		ENedatos<=0;
 		contador<=contador+1;
 		end
-		else if(contador==288)
+		
+		else if(contador==382)
 		begin
 			if (Phora==1)ENchora<=1;
 			else if (Pfecha==1)ENcfecha<=1;
@@ -68,7 +85,7 @@ always @(posedge clock)
 			else contador<=contador+1;
 			
 		end
-		else if (contador==289)
+		else if (contador==383)
 		begin
 		if (ENchora==1)
 			begin
@@ -93,14 +110,16 @@ always @(posedge clock)
 		
 		end
 		
-		else if (contador==293)
+		else if (contador==387)
 		begin
 			ENghora<=0;
 			ENgfecha<=0;
 			ENgcrono<=0;
+			crini<=cronoini;
+			form<=format;
 			contador<=contador+1;
 		end
-		else if (contador==395)contador<=0;
+		else if (contador==489)contador<=32;
 		
 		else contador<=contador+1;
 	end

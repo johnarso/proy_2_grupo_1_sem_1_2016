@@ -36,7 +36,9 @@ module Ext_datos(
 	 output reg [7:0]year,
 	 output reg [7:0]horacrono,
 	 output reg [7:0]mincrono,
-	 output reg [7:0]segcrono
+	 output reg [7:0]segcrono,
+	 output reg AmPm,
+	 output reg timer
     );
 reg [5:0]cont;
 reg [3:0]contadd;
@@ -64,6 +66,7 @@ begin
 	mincrono<=0;
 	segcrono<=0;
 	chsref<=0;
+	timer<=0;
 	
 	end
 	else if (chs>chsref) chsref<=chs;
@@ -81,6 +84,7 @@ begin
 		4'b0110:dir<=8'h43;
 		4'b0111:dir<=8'h42;
 		4'b1000:dir<=8'h41;
+		4'b1001:dir<=8'h01;
 		default dir<=8'h26;
 	endcase
 	ad<=1;
@@ -146,12 +150,17 @@ begin
 		4'b0000:year<=ADin;
 		4'b0001:mes<=ADin;
 		4'b0010:dia<=ADin;
-		4'b0011:hora<=ADin;
+		4'b0011:begin
+					hora[6:0]<=ADin[6:0];
+					AmPm<=ADin[7];
+					hora[7]<=0;
+					end
 		4'b0100:min<=ADin;
 		4'b0101:seg<=ADin;
 		4'b0110:horacrono<=ADin;
 		4'b0111:mincrono<=ADin;
 		4'b1000:segcrono<=ADin;
+		4'b1001:timer<=ADin[6];
 		default year<=ADin;
 		endcase
 		cont<=cont+1;
@@ -173,7 +182,7 @@ begin
 		end
 	else cont=cont+1;
 	
-	if (contadd==9)
+	if (contadd==10)
 		begin
 		contadd<=0;
 		cont<=0;

@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    11:08:28 03/23/2016 
+// Create Date:    19:13:27 03/26/2016 
 // Design Name: 
-// Module Name:    Ext_datos 
+// Module Name:    inicializacion 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,53 +18,27 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module Ghora(
-    input [7:0] hora,
-	 input [7:0] min,
-	 input [7:0] seg,
-	 input AmPm,
-	 input clock,
-	 input reset,
-	 input chs,
-	 output reg [7:0] ADout,
+module inicializacion(
+    input clock,
+    input reset,
+    output reg cs,
     output reg ad,
-    output reg wr,
     output reg rd,
-    output reg cs
-	 
+    output reg wr,
+    output reg [7:0] ADout
     );
+reg resetref;
 reg [6:0]cont;
-reg [1:0]contadd;
 reg [7:0]dir;
-reg chsref;
+
 
 always @(posedge clock)
 begin
-	if (reset)
-	begin
-	ad<=1'hz;
-	wr<=1'hz;
-	rd<=1'hz;
-	cs<=1'hz;
-	ADout<=8'hzz;
-	cont<=0;
-	contadd<=0;
-	chsref<=0;
-	
-	end
-	
-	else if (chs>chsref) chsref<=chs;
-	
-	else if (chsref)
+	if (resetref)
 	begin
 	if (cont==0)
 	begin
-	case (contadd)
-		2'b00:dir<=8'h23;
-		2'b01:dir<=8'h22;
-		2'b10:dir<=8'h21; 
-		default dir<=8'h23;
-	endcase
+	dir<=8'h02;
 	ad<=1;
 	wr<=1;
 	rd<=1;
@@ -125,15 +99,14 @@ begin
 		end
 	else if (cont==18)
 		begin
-		case (contadd)
-		2'b00:begin
-				ADout[6:0]<=hora[6:0];
-				ADout[7]<=AmPm;
-				end
-		2'b01:ADout<=min;
-		2'b10:ADout<=seg;
-		default ADout<=hora;
-		endcase
+		ADout[0]<=0;
+		ADout[1]<=0;
+		ADout[2]<=0;
+		ADout[3]<=0;
+		ADout[4]<=1;
+		ADout[5]<=0;
+		ADout[6]<=0;
+		ADout[7]<=0;
 		cont<=cont+1;
 		end
 	else if (cont==21)
@@ -148,23 +121,25 @@ begin
 		end
 	else if (cont==24)
 		begin
+		if (reset==0)resetref<=0;
 		ADout<=8'hzz;
-		cont<=cont+1;
-		end
-	else if (cont==34)
-		begin
-		cont<=0;
-		contadd<=contadd+1;
+		ad<=1'hz;
+		wr<=1'hz;
+		rd<=1'hz;
+		cs<=1'hz;
 		end
 	else cont=cont+1;
 	
-	if (contadd==3)
-		begin
-		contadd<=0;
-		cont<=0;
-		chsref<=0;
-		end
-	
+	end
+	else if (reset==1)
+	begin
+	ad<=1'hz;
+	wr<=1'hz;
+	rd<=1'hz;
+	cs<=1'hz;
+	ADout<=8'hzz;
+	cont<=0;
+	resetref<=1;
 	end
 	
 	else
@@ -177,4 +152,5 @@ begin
 	end
 	
 end
+
 endmodule
