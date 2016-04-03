@@ -31,17 +31,17 @@ module CFecha(
 	 input reset,
     output reg [7:0] diaC,
     output reg [7:0] mesC,
-    output reg [7:0] yearC
-   
+    output reg [7:0] yearC,
+	 output reg [2:0]contador
     );
-	 reg [1:0]contador;
+	 
 	 reg [2:0]step;
 	 reg BTupref;
 	 reg BTdownref;
 	 reg BTlref;
 	 reg BTrref;
-	 reg [7:0] varin;
-	 reg [7:0] varout;
+	 reg [3:0] varin;
+	 reg [3:0] varout;
 	 
 always @(posedge clk)
 begin
@@ -56,7 +56,8 @@ begin
 		diaC<=0;
 		mesC<=0;
 		yearC<=0;
-		
+		varout<=0;
+		varin<=0;
 		
 		
 	end
@@ -75,7 +76,7 @@ begin
 		begin
 		if (BTr>BTrref)
 		begin
-			if (contador==2)
+			if (contador==5)
 			contador<=0;
 			else contador<=contador+1;
 			BTrref<=BTr;
@@ -86,7 +87,7 @@ begin
 		if (BTl>BTlref)
 		begin
 			if (contador==0)
-			contador<=2;
+			contador<=5;
 			else contador<=contador-1;
 			BTlref<=BTl;
 			
@@ -98,10 +99,13 @@ begin
 		else if (step==2)
 			begin
 			case (contador)
-			2'b00:varin<=diaC;
-			2'b01:varin<=mesC;
-			2'b10:varin<=yearC;
-			default varin<=diaC;
+			3'b000: varin<=diaC[7:4];
+			3'b001: varin<=diaC[3:0];
+			3'b010: varin<=mesC[7:4];
+			3'b011: varin<=mesC[3:0];
+			3'b100: varin<=yearC[7:4];
+			3'b101: varin<=yearC[3:0];
+			default varin<=diaC[7:4];
 			endcase
 			step<=step+1;
 			end
@@ -112,14 +116,18 @@ begin
 		
 		if (BTup>BTupref)
 		begin
-			if (varin==31 && contador==0)varout<=0;
-			else if(varin==12 && contador==1)varout<=0;
-			else if (varin==99)varout<=0;
-			else if (varin==29 && mesC==2 && contador==0) varout<=0;
-			else if (mesC==4 || mesC==6 || mesC==9 || mesC==11)
+			if (varin==3 && contador==0)varout<=0;
+			else if (varin==1&&contador==1&&diaC[7:4]==3)varout<=0;
+			else if(varin==1 && contador==2)varout<=0;
+			else if (varin==9)
 				begin
-				if (varin==30 && contador==0)varout<=0;
+				if (contador==1&&diaC[7:4]==0)varout<=1;
+				else if (contador==3&&mesC[7:4]==0)varout<=1;
+				else if (contador==5&&yearC[7:4]==0)varout<=1;
+				else varout<=0;
 				end
+			else if (varin==2 && mesC==2 && contador==0) varout<=0;
+			else if ((mesC==4 || mesC==6 || mesC==9 || mesC==11)&&varin==0&&contador==1&&diaC[7:4]==3)varout<=0;
 			else varout<=varin+1;
 			BTupref<=BTup;
 		end
@@ -127,16 +135,21 @@ begin
 		
 		if (BTdown>BTdownref)
 		begin
-			if (varin==0 && contador==0)
+			if (varin==0)
 			begin
-				if(mesC==4 || mesC==6 || mesC==9 || mesC==11)varout<=30;
-				else if(mesC==2)varout<=29;
-				else varout<=31;
+			if (contador==1&&diaC[7:4]==3&&(mesC==4 || mesC==6 || mesC==9 || mesC==11))varout<=0;
+			else if (contador==1&&diaC[7:4]==3)varout<=1;
+			else if(contador==0&&mesC==2)varout<=2;
+			else if (contador==2)varout<=1;
+			else if (contador==3&&mesC[7:4]==1)varout<=2;
+			else varout<=9;
 			end
-			else if (varin==0 && contador==1)
-			varout<=12;
-			else if (varin==0 && contador==2)
-			varout<=99;
+			else if (varin==1)
+				begin
+				if (contador==1&&diaC[7:4]==0)varout<=9;
+				else if (contador==3&&mesC[7:4]==0)varout<=9;
+				else if (contador==5&&yearC[7:4]==0)varout<=9;
+				end
 			else varout<=varin-1;
 			BTdownref<=BTdown;
 			
@@ -147,10 +160,13 @@ begin
 		else if (step==4)
 		begin
 		case (contador)
-			2'b00:diaC<=varout;
-			2'b01: mesC<=varout;
-			2'b10: yearC<=varout;
-			default diaC<=varout;
+			3'b000: diaC[7:4]<=varout;
+			3'b001: diaC[3:0]<=varout;
+			3'b010: mesC[7:4]<=varout;
+			3'b011: mesC[3:0]<=varout;
+			3'b100: yearC[7:4]<=varout;
+			3'b101: yearC[3:0]<=varout;
+			default diaC[7:4]<=varout;
 		endcase
 		step<=1;
 		end

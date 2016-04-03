@@ -31,17 +31,17 @@ module CCrono(
 	 input reset,
     output reg [7:0] HCcr,
     output reg [7:0] MCcr,
-    output reg [7:0] SCcr
-   
+    output reg [7:0] SCcr,
+	 output reg [2:0]contador
     );
-	 reg [1:0]contador;
+	 
 	 reg [2:0]step;
 	 reg BTupref;
 	 reg BTdownref;
 	 reg BTlref;
 	 reg BTrref;
-	 reg [7:0] varin;
-	 reg [7:0] varout;
+	 reg [3:0] varin;
+	 reg [3:0] varout;
 	 
 always @(posedge clk)
 begin
@@ -96,10 +96,13 @@ begin
 		else if (step==2)//paso 2
 			begin
 			case (contador)
-			2'b00: varin<=HCcr;
-			2'b01: varin<=MCcr;
-			2'b10: varin<=SCcr;
-			default varin<=HCcr;
+			3'b000: varin<=HCcr[7:4];
+			3'b001: varin<=HCcr[3:0];
+			3'b010: varin<=MCcr[7:4];
+			3'b011: varin<=MCcr[3:0];
+			3'b100: varin<=SCcr[7:4];
+			3'b101: varin<=SCcr[3:0];
+			default varin<=HCcr[7:4];
 			endcase
 			
 			step<=step+1;
@@ -112,10 +115,11 @@ begin
 		
 		if (BTup>BTupref)
 		begin
-			if (varin==59)
-			varout<=0;
-			else if (varin==24 && contador==0)
-			varout<=0;
+			if (varin==5&&(contador==2||contador==4))varout<=0;
+			else if (varin==9&&(contador==3||contador==5))varout<=0;
+			else if (varin==2 && contador==0)varout<=0;
+			else if (varin==9 && contador==1)varout<=0;
+			else if (varin==4 && contador==1 && HCcr==2)varout<=0;
 			else varout<=varin+1;
 			BTupref<=BTup;
 		end
@@ -123,10 +127,14 @@ begin
 		
 		if (BTdown>BTdownref)
 		begin
-			if (varin==0 && contador==0)
-			varout<=12;
-			else if (varin==0)
-			varout<=59;
+			if (varin==0)
+			begin
+				if (contador==0)varout<=2;
+				else if (contador==1&&HCcr[7:4]==2)varout<=4;
+				else if (contador==1)varout<=9;
+				else if (contador==2||contador==4)varout<=5;
+				else if (contador==3||contador==5)varout<=9;
+			end
 			else varout<=varin-1;
 			BTdownref<=BTdown;
 		end
@@ -137,10 +145,13 @@ begin
 		else if (step==4)
 		begin
 		case (contador)
-			2'b00: HCcr<=varout;
-			2'b01: MCcr<=varout;
-			2'b10: SCcr<=varout;
-			default HCcr<=varout;
+			3'b000: HCcr[7:4]<=varout;
+			3'b001: HCcr[3:0]<=varout;
+			3'b010: MCcr[7:4]<=varout;
+			3'b011: MCcr[3:0]<=varout;
+			3'b100: SCcr[7:4]<=varout;
+			3'b101: SCcr[3:0]<=varout;
+			default HCcr[7:4]<=varout;
 		endcase
 		step<=1;
 		end
