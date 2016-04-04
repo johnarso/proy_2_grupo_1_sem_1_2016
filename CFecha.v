@@ -69,7 +69,7 @@ begin
 		diaC<=dia;
 		mesC<=mes;
 		yearC<=year;
-		step<=step+1;
+		step<=step+1'b1;
 	end
 		
 	else if (step==1)
@@ -78,7 +78,7 @@ begin
 		begin
 			if (contador==5)
 			contador<=0;
-			else contador<=contador+1;
+			else contador<=contador+1'b1;
 			BTrref<=BTr;
 			
 		end
@@ -88,12 +88,12 @@ begin
 		begin
 			if (contador==0)
 			contador<=5;
-			else contador<=contador-1;
+			else contador<=contador-1'b1;
 			BTlref<=BTl;
 			
 		end
 		
-		step<=step+1;
+		step<=step+1'b1;
 		end
 		
 		else if (step==2)
@@ -107,7 +107,7 @@ begin
 			3'b101: varin<=yearC[3:0];
 			default varin<=diaC[7:4];
 			endcase
-			step<=step+1;
+			step<=step+1'b1;
 			end
 		else if (step==3)
 		begin
@@ -128,7 +128,7 @@ begin
 				end
 			else if (varin==2 && mesC==2 && contador==0) varout<=0;
 			else if ((mesC==4 || mesC==6 || mesC==9 || mesC==11)&&varin==0&&contador==1&&diaC[7:4]==3)varout<=0;
-			else varout<=varin+1;
+			else varout<=varin+1'b1;
 			BTupref<=BTup;
 		end
 		
@@ -150,11 +150,11 @@ begin
 				else if (contador==3&&mesC[7:4]==0)varout<=9;
 				else if (contador==5&&yearC[7:4]==0)varout<=9;
 				end
-			else varout<=varin-1;
+			else varout<=varin-1'b1;
 			BTdownref<=BTdown;
 			
 		end
-		step<=step+1;
+		step<=step+1'b1;
 		end
 		
 		else if (step==4)

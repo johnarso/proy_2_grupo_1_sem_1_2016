@@ -67,15 +67,15 @@ begin
 		HCcr<=Hcr;
 		MCcr<=Mcr;
 		SCcr<=Scr;
-		step<=step+1;
+		step<=step+1'b1;
 	end
 	else if (step==1)//paso 1
 		begin
 		if (BTr>BTrref)
 		begin
-			if (contador==2)
+			if (contador==5)
 			contador<=0;
-			else contador<=contador+1;
+			else contador<=contador+1'b1;
 			BTrref<=BTr;
 		end
 		else if (BTr<BTrref)
@@ -84,12 +84,12 @@ begin
 		if (BTl>BTlref)
 		begin
 			if (contador==0)
-			contador<=2;
-			else contador<=contador-1;
+			contador<=5;
+			else contador<=contador-1'b1;
 			BTlref<=BTl;
 		end
 		
-		step<=step+1;
+		step<=step+1'b1;
 		end
 		
 			
@@ -105,7 +105,7 @@ begin
 			default varin<=HCcr[7:4];
 			endcase
 			
-			step<=step+1;
+			step<=step+1'b1;
 			end
 		
 		else if (step==3)
@@ -120,7 +120,7 @@ begin
 			else if (varin==2 && contador==0)varout<=0;
 			else if (varin==9 && contador==1)varout<=0;
 			else if (varin==4 && contador==1 && HCcr==2)varout<=0;
-			else varout<=varin+1;
+			else varout<=varin+1'b1;
 			BTupref<=BTup;
 		end
 		
@@ -135,11 +135,11 @@ begin
 				else if (contador==2||contador==4)varout<=5;
 				else if (contador==3||contador==5)varout<=9;
 			end
-			else varout<=varin-1;
+			else varout<=varin-1'b1;
 			BTdownref<=BTdown;
 		end
 		
-		step<=step+1;
+		step<=step+1'b1;
 		end
 		
 		else if (step==4)

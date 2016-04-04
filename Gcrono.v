@@ -32,7 +32,7 @@ module Gcrono(
     output reg cs
 	 
     );
-reg [6:0]cont;
+reg [5:0]cont;
 reg [1:0]contadd;
 reg [7:0]dir;
 reg chsref;
@@ -41,14 +41,15 @@ always @(posedge clock)
 begin
 	if (reset)
 	begin
-	ad<=1'hz;
-	wr<=1'hz;
-	rd<=1'hz;
-	cs<=1'hz;
-	ADout<=8'hzz;
+	ad<=1'h1;
+	wr<=1'h1;
+	rd<=1'h1;
+	cs<=1'h1;
+	ADout<=8'hff;
 	cont<=0;
 	contadd<=0;
 	chsref<=0;	
+	dir<=8'h0f;
 	end
 	
 	else if (chs>chsref) chsref<=chs;
@@ -61,113 +62,114 @@ begin
 		2'b00:dir<=8'h43;
 		2'b01:dir<=8'h42;
 		2'b10:dir<=8'h41; 
+		2'b11:dir<=8'hf2;
 		default dir<=8'h43;
 	endcase
 	ad<=1;
 	wr<=1;
 	rd<=1;
 	cs<=1;
-	cont<=cont+1;
+	cont<=cont+1'b1;
 	end
 		
 	else if (cont==1)
 	begin
 		
 		ad<=0;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 	end
 	else if(cont==2)
 		begin
 		cs<=0;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
 	else if (cont==3)
 		begin
 		wr<=0;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
 	else if (cont==4)
 		begin
 		ADout<=dir;
-		cont<=cont+1;
-		end
-	else if (cont==8)
-		begin
-		wr<=1;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
 	else if (cont==9)
 		begin
-		cs<=1;
-		cont<=cont+1;
+		wr<=1;
+		cont<=cont+1'b1;
 		end
 	else if (cont==10)
 		begin
-		ad<=1;
-		cont<=cont+1;
+		cs<=1;
+		cont<=cont+1'b1;
 		end
 	else if (cont==11)
 		begin
-		ADout<=8'hzz;
-		cont<=cont+1;
+		ad<=1;
+		cont<=cont+1'b1;
 		end
-	else if (cont==15)
+	else if (cont==13)
+		begin
+		ADout<=8'hff;
+		cont<=cont+1'b1;
+		end
+	else if (cont==21)
 		begin
 		cs<=0;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
-	else if (cont==16)
+	else if (cont==22)
 		begin
 		wr<=0;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
-	else if (cont==18)
+	else if (cont==23)
 		begin
 		case (contadd)
 		2'b00:ADout<=horac;
 		2'b01:ADout<=minc;
 		2'b10:ADout<=segc;
+		2'b11:ADout<=8'hff;
 		default ADout<=horac;
 		endcase
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
-	else if (cont==21)
+	else if (cont==28)
 		begin
 		wr<=1;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
-	else if (cont==22)
+	else if (cont==29)
 		begin
 		cs<=1;
-		cont<=cont+1;
+		cont<=cont+1'b1;
 		end
-	else if (cont==24)
+	else if (cont==31)
 		begin
-		ADout<=8'hzz;
-		cont<=cont+1;
+		ADout<=8'hff;
+		cont<=cont+1'b1;
 		end
-	else if (cont==34)
-		begin
-		cont<=0;
-		contadd<=contadd+1;
-		end
-	else cont=cont+1;
-	
-	if (contadd==3)
+	else if (contadd==3&&cont==39)
 		begin
 		contadd<=0;
 		cont<=0;
 		chsref<=0;
 		end
+	else if (cont==39)
+		begin
+		cont<=0;
+		contadd<=contadd+1'b1;
+		end
+	else cont<=cont+1'b1;
 	
 	end
 	else
 	begin
-	ADout<=8'hzz;
-	cs<=1'hz;
-	ad<=1'hz;
-	wr<=1'hz;
-	rd<=1'hz;
+	ADout<=8'hff;
+	cs<=1'h1;
+	ad<=1'h1;
+	wr<=1'h1;
+	rd<=1'h1;
 	end
 	
 end
