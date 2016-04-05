@@ -22,8 +22,6 @@ module chcronoformatlock(
     input clock,
     input reset,
 	 input enc,
-	 input enf,
-	 input enl,
 	 input inic,
 	 input format,
 	 input lock,
@@ -35,11 +33,7 @@ module chcronoformatlock(
     );
 reg [4:0]cont;
 reg encrono;
-reg enformat;
-reg enlock;
 reg encr;
-reg enfor;
-reg enlo;
 always @(posedge clock)
 begin
 	if (reset)
@@ -49,16 +43,12 @@ begin
 	rd<=1'h1;
 	cs<=1'h1;
 	encrono<=0;
-	enformat<=0;
-	enlock<=0;
 	encr<=0;
-	enfor<=0;
-	enlo<=0;
 	ADout<=8'hff;
 	cont<=0;
 	end
 
-	else if (encrono<enc||enformat<enf||enlock<enl||encrono<encr||enformat<enfor||enlock<enlo)
+	else if (encrono<enc||encrono<encr)
 	begin
 	if (cont==0)
 	begin
@@ -67,8 +57,6 @@ begin
 	rd<=1;
 	cs<=1;
 	encr<=enc;
-	enfor<=enf;
-	enlo<=enl;
 	cont<=cont+1'b1;
 	end
 		
@@ -148,12 +136,8 @@ begin
 	else if (cont==31)
 		begin
 		encrono<=enc;
-		enformat<=enf;
-		enlock<=enl;
 		cont<=0;
 		encr<=0;
-		enfor<=0;
-		enlo<=0;
 		ADout<=8'hff;
 		ad<=1'h1;
 		wr<=1'h1;
@@ -164,8 +148,7 @@ begin
 	
 	end
 	else if (encrono>enc)encrono<=0;
-	else if (enformat>enf)enformat<=0;
-	else if (enlock<enl)enlock<=0;
+	
 	
 	else
 	begin

@@ -147,7 +147,7 @@ begin
 		rd<=0;
 		cont<=cont+1'b1;
 		end
-	else if (cont==23)
+	else if (cont==27)
 		begin
 		case (contadd)
 		4'b0001:year<=ADin;

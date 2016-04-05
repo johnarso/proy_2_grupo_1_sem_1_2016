@@ -30,140 +30,84 @@ module controlRST(
 	 input rg,
 	 input rst,
 	 input clk,
-	 inout [7:0]AD,
+	 input [7:0]ADin,
+	 output [7:0]ADout,
 	 output ad,
 	 output wr,
 	 output cs,
 	 output rd,
-    output reg hora,
-	 output reg min,
-	 output reg seg,
-	 output reg AMPM,
-	 output reg d,
-	 output reg me,
-	 output reg y,
-	 output reg horacr,
-	 output reg mincr,
-	 output reg segcr,
-	 output tim
+    output [7:0]hora,
+	 output [7:0]min,
+	 output [7:0]seg,
+	 output AMPM,
+	 output [7:0]d,
+	 output [7:0]me,
+	 output [7:0]y,
+	 output [7:0]horacr,
+	 output [7:0]mincr,
+	 output [7:0]segcr,
+	 output tim,
+	 output [2:0]cursgcrono,
+	 output [2:0]cursghora,
+	 output [2:0]cursgfecha
     );
-wire ENch,ENcf,ENcc,ENgh,ENgf,ENgc,ENed,ENcfor,ENci,ENlo,lck;
-wire h,m,s,dia,mes,year,hcr,mcr,scr,ap;
-wire Hcc,Mcc,Scc;
-wire Hc,Mc,Sc,ampm;
+wire ENch,ENcf,ENcc,ENgh,ENgf,ENgc,ENed,ENci,lck;
+wire ap1,ap2;
 wire dc,mc,yc;
 wire arriba,abajo,izq,der,fmt,ph,pf,pc,ic;
+wire [11:0]ctrl1;wire[11:0]ctrl2;wire[11:0]ctrl3;wire[11:0]ctrl4;wire[11:0]ctrl5;wire[11:0]ctrl6;
+wire [23:0]dt11;wire [23:0]dt12;wire [23:0]dt13;wire [23:0]dt21;wire [23:0]dt22;wire [23:0]dt23;
+wire Smuxdt;
+wire [2:0]Smuxctr;
 
-inicializacion instini(.clock(clk),.reset(rst),.cs(cs),.ad(ad),.rd(rd),.wr(wr),.ADout(AD) );
+inicializacion instini(.clock(clk),.reset(rst),.cs(ctrl1[9]),.ad(ctrl1[11]),.rd(ctrl1[10]),.wr(ctrl1[8]),.ADout(ctrl1[7:0]) );
 
 chcronoformatlock instchcrfolo(.clock(clk),.reset(rst),.enc(ENci), //MODIFICAR MODULO
-										.enf(ENcfor),.enl(ENlo),.inic(SWiniC),.format(SWf),.lock(lck),
-										.ad(ad),.wr(wr),.cs(cs),
-										.rd(rd),.ADout(AD) );
+										.inic(SWiniC),.format(SWf),.lock(lck),
+										.ad(ctrl2[11]),.wr(ctrl2[8]),.cs(ctrl2[9]),
+										.rd(ctrl2[10]),.ADout(ctrl2[7:0]) );
 
 FFs instFFs(.aumentar(up),.disminuir(dwn),.left(lf),.right(rg),.format(SWf),
 				.ph(SWhora),.pf(SWfecha),.pc(SWcrono),.ic(SWiniC),.clk(clk),.reset(rst),.au(arriba),.dis(abajo),.l(izq),
 				.r(der),.f(fmt),.prh(ph),.prf(pf),.prc(pc),.icr(ic) );
 
 control instcontrol(.clock(clk),.reset(rst),.Phora(ph),.Pfecha(pf),.Pcrono(pc),
-							.cronoini(SWiniC),.format(SWf),
+							.cronoini(ic),.format(fmt),
 						.ENchora(ENch),.ENcfecha(ENcf),.ENccrono(ENcc),.ENghora(ENgh),
 						.ENgfecha(ENgf),.ENgcrono(ENgc),.ENedatos(ENed),
-						.ENcformat(ENcfor),.ENcinic(ENci),.ENlock(ENlo),.lock(lck)	);
+						.ENcinic(ENci),.lock(lck),.selmuxdt(Smuxdt),.selmuxctr(Smuxctr)	);
 
-Ext_datos instExt_datos(.ADin(AD),.clock(clk),.reset(rst),.chs(ENed),
-								.ADout(AD),.ad(ad),.wr(wr),.rd(rd),.cs(cs),.hora(h),.min(m),
-								.seg(s),.dia(dia),.mes(mes),.year(year),.horacrono(hcr),.mincrono(mcr),
-								.segcrono(scr),.AmPm(ap),.timer(tim) );
+Ext_datos instExt_datos(.ADin(ADin),.clock(clk),.reset(rst),.chs(ENed),
+								.ADout(ctrl3[7:0]),.ad(ctrl3[11]),.wr(ctrl3[8]),.rd(ctrl3[10]),.cs(ctrl3[9]),.hora(dt11[23:16]),.min(dt11[15:8]),
+								.seg(dt11[7:0]),.dia(dt12[23:16]),.mes(dt12[15:8]),.year(dt12[7:0]),.horacrono(dt13[23:16]),.mincrono(dt13[15:8]),
+								.segcrono(dt13[7:0]),.AmPm(ap1),.timer(tim) );
 
-CCrono instCCrono(.Hcr(hcr),.Mcr(mcr),.Scr(scr),.EN(ENcc),.BTup(arriba),.BTdown(abajo),
-						.BTl(izq),.BTr(der),.clk(clk),.reset(rst),.HCcr(Hcc),.MCcr(Mcc),
-						.SCcr(Scc) );
+CCrono instCCrono(.Hcr(dt13[23:16]),.Mcr(dt13[15:8]),.Scr(dt13[7:0]),.EN(ENcc),.BTup(arriba),.BTdown(abajo),
+						.BTl(izq),.BTr(der),.clk(clk),.reset(rst),.HCcr(dt23[23:16]),.MCcr(dt23[15:8]),
+						.SCcr(dt23[7:0]),.contador(cursgcrono) );
 						
-CFecha instCFecha(.dia(dia),.mes(mes),.year(year),.EN(ENcf),.BTup(arriba),.BTdown(abajo),
-						.BTl(izq),.BTr(der),.clk(clk),.reset(rst),.diaC(dc),.mesC(mc),
-						.yearC(yc) );
+CFecha instCFecha(.dia(dt12[23:16]),.mes(dt12[15:8]),.year(dt12[7:0]),.EN(ENcf),.BTup(arriba),.BTdown(abajo),
+						.BTl(izq),.BTr(der),.clk(clk),.reset(rst),.diaC(dt22[23:16]),.mesC(dt22[15:8]),
+						.yearC(dt22[7:0]),.contador(cursgfecha) );
 
-CHora instCHora(.H(h),.M(m),.S(s),.ampm(ap),.format(fmt),.EN(ENch),.BTup(arriba),.BTdown(abajo), 
-					.BTl(izq),.BTr(der),.clk(clk),.reset(rst),.HC(Hc),.MC(Mc),.SC(Sc),.AmPm(ampm));
+CHora instCHora(.H(dt11[23:16]),.M(dt11[15:8]),.S(dt11[7:0]),.ampm(ap1),.format(fmt),.EN(ENch),.BTup(arriba),.BTdown(abajo), 
+					.BTl(izq),.BTr(der),.clk(clk),.reset(rst),.HC(dt21[23:16]),.MC(dt21[15:8]),.SC(dt21[7:0]),.AmPm(ap2),.contador(cursghora));
 
-Gcrono instGcrono(.horac(Hcc),.minc(Mcc),.segc(Scc),.clock(clk),.reset(rst),.chs(ENgc),
-					.ADout(AD),.ad(ad),.wr(wr),.rd(rd),.cs(cs) );
+Gcrono instGcrono(.horac(dt23[23:16]),.minc(dt23[15:8]),.segc(dt23[7:0]),.clock(clk),.reset(rst),.chs(ENgc),
+					.ADout(ctrl6[7:0]),.ad(ctrl6[11]),.wr(ctrl6[8]),.rd(ctrl6[10]),.cs(ctrl6[9]) );
 					
-Gfecha instGfecha(.dia(dc),.mes(mc),.year(yc),.clock(clk),.reset(rst),.chs(ENgf),
-			.ADout(AD),.ad(ad),.wr(wr),.rd(rd),.cs(cs) );
+Gfecha instGfecha(.dia(dt22[23:16]),.mes(dt22[15:8]),.year(dt22[7:0]),.clock(clk),.reset(rst),.chs(ENgf),
+			.ADout(ctrl5[7:0]),.ad(ctrl5[11]),.wr(ctrl5[8]),.rd(ctrl5[10]),.cs(ctrl5[9]) );
 
-Ghora instGhora(.hora(Hc),.min(Mc),.seg(Sc),.AmPm(ampm),.clock(clk),.reset(rst),.chs(ENgh),
-						.ADout(AD),.ad(ad),.wr(cs),.rd(rd),.cs(cs) );
-always @(posedge clk)
-begin
-if (rst)
-begin
-	hora<=0;
-	min<=0;
-	seg<=0;
-	AMPM<=0;
-	d<=0;
-	me<=0;
-	y<=0;
-	horacr<=0;
-	mincr<=0;
-	segcr<=0;
-end
-else
-begin
-	if (ph==1)
-	begin
-		hora<=Hc;
-		min<=Mc;
-		seg<=Sc;
-		AMPM<=ampm;
-		d<=dia;
-		me<=mes;
-		y<=year;
-		horacr<=hcr;
-		mincr<=mcr;
-		segcr<=scr;
-	end
-	else if (pf==1)
-	begin
-		hora<=h;
-		min<=m;
-		seg<=s;
-		AMPM<=ap;
-		d<=dc;
-		me<=mc;
-		y<=yc;
-		horacr<=hcr;
-		mincr<=mcr;
-		segcr<=scr;
-	end
-	else if (pc==1)
-	begin
-		hora<=h;
-		min<=m;
-		seg<=s;
-		AMPM<=ap;
-		d<=dia;
-		me<=mes;
-		y<=year;
-		horacr<=Hcc;
-		mincr<=Mcc;
-		segcr<=Scc;
-	end
-	else
-	begin
-		hora<=h;
-		min<=m;
-		seg<=s;
-		AMPM<=ap;
-		d<=dia;
-		me<=mes;
-		y<=year;
-		horacr<=hcr;
-		mincr<=mcr;
-		segcr<=scr;
-	end
-end
-end
+Ghora instGhora(.hora(dt21[22:16]),.min(dt21[15:8]),.seg(dt21[7:0]),.AmPm(ap2),.clock(clk),.reset(rst),.chs(ENgh),
+						.ADout(ctrl4[7:0]),.ad(ctrl4[11]),.wr(ctrl4[8]),.rd(ctrl4[10]),.cs(ctrl4[9]) );
+
+MuxRTC instMuxrtc(.control1(ctrl1),.control2(ctrl2),.control3(ctrl3),.control4(ctrl4),
+						.control5(ctrl5),.control6(ctrl6),.seleccion(Smuxctr),.ad(ad),
+						.rd(rd),.cs(cs),.wr(wr),.ADout(ADout) );
+
+Muxdatos instMuxdatos(.datos11(dt11),.datos12(dt12),.datos13(dt13),.datos21(dt21),.datos22(dt22),.datos23(dt23),.ap1(ap1),.ap2(ap2),
+							 .seleccion(Smuxdt),.hora(hora),.min(min),.seg(seg),.dia(d),.mes(me),.year(y),.horacr(horacr),.mincr(mincr),.segcr(segcr),.ampm(AMPM));
+
+
 endmodule

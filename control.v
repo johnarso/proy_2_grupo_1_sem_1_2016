@@ -33,10 +33,10 @@ module control(
     output reg ENgfecha,
     output reg ENgcrono,
     output reg ENedatos,
-	 output reg ENcformat,
 	 output reg ENcinic,
-	 output reg ENlock,
-	 output reg lock
+	 output reg lock,
+	 output reg selmuxdt,
+	 output reg [2:0]selmuxctr
     );
 reg [9:0]contador;
 reg crini;
@@ -59,100 +59,128 @@ always @(posedge clock)
 		form<=0;
 		Phoraref<=0;
 		Pfecharef<=0;
-		ENcformat<=0;
 		ENcinic<=0;
-		ENlock<=0;
+		lock<=0;
+		selmuxdt<=0;
+		selmuxctr<=0;
 	end
 	else
 	begin
-	if (contador==32)
+	if (contador==155)
 		begin
 		if (cronoini!=crini)
 		begin
 			ENcinic<=1;
+			selmuxctr<=1;
 			crini<=cronoini;
+			contador<=contador+1'b1;
 		end
-		if (Phora!=Phoraref||Pfecha!=Pfecharef)
+		else if (Phora!=Phoraref||Pfecha!=Pfecharef)
 		begin
+		selmuxctr<=1;
 		if (Phora==1||Pfecha==1)
 			begin
-				ENlock<=1;
+				ENcinic<=1;
 				lock<=1;
 			end
 		else if (Phora==0 && Pfecha==0)
 			begin
-				ENlock<=1;
+				ENcinic<=1;
 				lock<=0;
 			end
 			Phoraref<=Phora;
 			Pfecharef<=Pfecha;
+			contador<=contador+1'b1;
 		end
-		
-		if (format!=form)
+		else if (format!=form)
 		begin 
 			ENcinic<=1;
+			selmuxctr<=1;
 			form<=format;
+			contador<=contador+1'b1;
 		end
-		contador<=contador+1;
+		else contador<=186;
 		end
 		
-		else if (contador==62)
+		else if (contador==157)
+		begin
+		ENcinic<=0;
+		contador<=contador+1'b1;
+		end
+		
+		else if (contador==196)
 		begin
 		ENedatos<=1;
-		contador<=contador+1;
+		selmuxctr<=2;
+		selmuxdt<=0;
+		contador<=contador+1'b1;
 		end
 		
-		else if(contador==65)
+		else if(contador==198)
 		begin
 		ENedatos<=0;
-		contador<=contador+1;
+		contador<=contador+1'b1;
 		end
 		
-		else if(contador==382)
+		else if(contador==626)
 		begin
-			if (Phora==1)ENchora<=1;
-			else if (Pfecha==1)ENcfecha<=1;
-			else if (Pcrono==1)ENccrono<=1;
-			else contador<=contador+1;
+			if (Phora==1)
+				begin
+				ENchora<=1;
+				selmuxdt<=1;
+				contador<=contador+1'b1;
+				end
+			else if (Pfecha==1)
+				begin
+				ENcfecha<=1;
+				selmuxdt<=1;
+				contador<=contador+1'b1;
+				end
+			else if (Pcrono==1)
+				begin
+				ENccrono<=1;
+				selmuxdt<=1;
+				contador<=contador+1'b1;
+				end
+			else contador<=155;
 			
 		end
-		else if (contador==383)
+		else if (contador==628)
 		begin
-		if (ENchora==1)
+		if (Phora==0)
 			begin
 			ENchora<=0;
 			ENghora<=1;
-			contador<=contador+1;
+			selmuxctr<=3;
+			contador<=contador+1'b1;
 			end
-		else if(ENcfecha==1)
+		else if(Pfecha==0)
 			begin
 			ENcfecha<=0;
 			ENgfecha<=1;
-			contador<=contador+1;
+			selmuxctr<=4;
+			contador<=contador+1'b1;
 			end
-		else if(ENccrono==1)
+		else if(Pcrono==0)
 			begin
 			ENccrono<=0;
 			ENgcrono<=1;
-			contador<=contador+1;
+			selmuxctr<=5;
+			contador<=contador+1'b1;
 			end
-		
-		else contador<=0;
 		
 		end
 		
-		else if (contador==387)
+		else if (contador==630)
 		begin
 			ENghora<=0;
 			ENgfecha<=0;
 			ENgcrono<=0;
-			crini<=cronoini;
-			form<=format;
-			contador<=contador+1;
+			contador<=contador+1'b1;
 		end
-		else if (contador==489)contador<=32;
+		else if (contador==788)contador<=55;
 		
-		else contador<=contador+1;
+		else contador<=contador+1'b1;
 	end
 	
 	end
