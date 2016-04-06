@@ -1,0 +1,44 @@
+
+# PlanAhead Generated IO constraints 
+
+NET "colorsito[3]" IOSTANDARD = LVCMOS33;
+NET "colorsito[11]" IOSTANDARD = LVCMOS33;
+NET "colorsito[10]" IOSTANDARD = LVCMOS33;
+NET "colorsito[9]" IOSTANDARD = LVCMOS33;
+NET "colorsito[8]" IOSTANDARD = LVCMOS33;
+NET "colorsito[7]" IOSTANDARD = LVCMOS33;
+NET "colorsito[6]" IOSTANDARD = LVCMOS33;
+NET "colorsito[5]" IOSTANDARD = LVCMOS33;
+NET "colorsito[4]" IOSTANDARD = LVCMOS33;
+NET "colorsito[2]" IOSTANDARD = LVCMOS33;
+NET "colorsito[1]" IOSTANDARD = LVCMOS33;
+NET "colorsito[0]" IOSTANDARD = LVCMOS33;
+NET "sw[2]" IOSTANDARD = LVCMOS33;
+NET "sw[1]" IOSTANDARD = LVCMOS33;
+NET "sw[0]" IOSTANDARD = LVCMOS33;
+NET "hsito" IOSTANDARD = LVCMOS33;
+NET "relojsito" IOSTANDARD = LVCMOS33;
+NET "resetito" IOSTANDARD = LVCMOS33;
+NET "vsito" IOSTANDARD = LVCMOS33;
+
+# PlanAhead Generated physical constraints 
+
+NET "relojsito" LOC = E3;
+NET "resetito" LOC = P4;
+NET "sw[2]" LOC = V7;
+NET "sw[1]" LOC = V6;
+NET "sw[0]" LOC = V5;
+NET "hsito" LOC = B11;
+NET "vsito" LOC = B12;
+NET "colorsito[8]" LOC = A3;
+NET "colorsito[9]" LOC = B4;
+NET "colorsito[10]" LOC = C5;
+NET "colorsito[11]" LOC = A4;
+NET "colorsito[4]" LOC = C6;
+NET "colorsito[5]" LOC = A5;
+NET "colorsito[6]" LOC = B6;
+NET "colorsito[7]" LOC = A6;
+NET "colorsito[0]" LOC = B7;
+NET "colorsito[1]" LOC = C7;
+NET "colorsito[2]" LOC = D7;
+NET "colorsito[3]" LOC = D8;
