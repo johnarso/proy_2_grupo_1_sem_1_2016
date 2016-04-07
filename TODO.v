@@ -44,8 +44,13 @@ module TODO(
 	 assign swit=sw;
 	 wire medio_seg;
 	 
+	 wire [1:0] direc_prog;
+	 wire [2:0] prog_crono, prog_fecha, prog_hora;
+	 
 	Prueba inst_prueba(
 	.SW(swit),
+	.d_pg(direc_prog),
+	.p_cr(prog_crono), .p_fe(prog_fecha),.p_ho(prog_hora),
 	.CRONO_FIN(finale), .AMPM(tempo), .FORMATO(formaggio),
 	.HREL(h_oro), .MREL(m_oro), .SREL(s_oro), .DIA(giorno), .MES(messe), .ANIO(agno), 
 	.HRUN(h_run), .MRUN(m_run), .SRUN(s_run),
@@ -53,7 +58,9 @@ module TODO(
     );
 	 
 	 Caracter_selector inst_selector_char(
-    .NEXYS_CLOCK(relojsita),
+    .NEXYS_CLOCK(relojsita), .clk_parp(medio_seg),
+	 .dir_prog(direc_prog),
+	 .p_crono(prog_crono), .p_fecha(prog_fecha), .p_hora(prog_hora),
 	 .crono_end(parpa_parpa), .am_pm(tempo), .formato(formaggio),
 	 .hora(h_oro), .min(m_oro), .seg(s_oro), .dia(giorno), .mes(messe), .year(agno), 
 	 .hcrono_run(h_run), .mcrono_run(m_run), .scrono_run(s_run), 

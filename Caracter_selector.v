@@ -19,7 +19,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module Caracter_selector(
-    input NEXYS_CLOCK,
+    input NEXYS_CLOCK, clk_parp,
+	 input [1:0] dir_prog,
+	 input [2:0] p_crono, p_fecha, p_hora,
 	 input crono_end, am_pm, formato,
 	 input [7:0] hora, min, seg, dia, mes, year, hcrono, mcrono, scrono, hcrono_run, mcrono_run, scrono_run,
 	 input [9:0] pix_x,
@@ -352,7 +354,7 @@ module Caracter_selector(
 			4'h4: caracter_c_a=7'h72;	//r
 			4'h5: caracter_c_a=7'h6f;	//o
 			4'h6: caracter_c_a=7'h6e;	//n
-			4'h7: caracter_c_a=7'h6f;	//o
+			4'h7: caracter_c_a=7'h1a;	//ó
 			4'h8: caracter_c_a=7'h6d;	//m
 			4'h9: caracter_c_a=7'h65;	//e
 			4'ha: caracter_c_a=7'h74;	//t
@@ -380,9 +382,9 @@ module Caracter_selector(
 		endcase
 	 end
 	 
-	 assign On_cron_c= (pix_y[9:5]==5'd6) && (28<=pix_x[9:4]) && (pix_x[9:4]<38);
-	 assign db_c_c=pix_x[3:1];
-	 assign df_c_c=pix_y[4:1];
+	 assign On_cron_c= (pix_y[9:6]==4'd3) && (14<=pix_x[9:5]) && (pix_x[9:5]<19);
+	 assign db_c_c=pix_x[4:2];
+	 assign df_c_c=pix_y[5:2];
 	 always @*
 	 begin
 		case (crono_end)
@@ -390,8 +392,8 @@ module Caracter_selector(
 			1'h1: RING = 7'h01;
 			default: RING = 7'h00;	
 		endcase
-		case (pix_x[7:4])
-			4'hd: caracter_c_c=RING;	// ¤
+		case (pix_x[8:5])
+			4'hf: caracter_c_c=RING;	// ¤
 			default: caracter_c_c=7'h00;	//
 		endcase
 	 end
@@ -570,60 +572,94 @@ module Caracter_selector(
 	 
 	 always @* 
 	 begin
-	 color=12'hcc9;					//background			
+	 color=12'hccc;					//background			
 		if (On_date_a) 
 			begin CARACTER=caracter_f_a; DIR_FILA= df_f_a; DIR_BIT=db_f_a; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_date_b) 
 			begin CARACTER=caracter_f_b; DIR_FILA= df_f_b; DIR_BIT=db_f_b; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (dir_prog==0 && fuente_bit) color=12'h00b;				//Letras, navy
+				else if (dir_prog==2)
+				begin
+					if (p_fecha==0 && pix_x[7:4]==4'hf && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_fecha==0 && pix_x[7:4]==4'hf && ~clk_parp) color=12'hccc;					//background	
+					else if (p_fecha==1 && pix_x[7:4]==4'h0 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_fecha==1 && pix_x[7:4]==4'h0 && ~clk_parp) color=12'hccc;					//background
+					else if (p_fecha==2 && pix_x[7:4]==4'h2 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_fecha==2 && pix_x[7:4]==4'h2 && ~clk_parp) color=12'hccc;					//background
+					else if (p_fecha==3 && pix_x[7:4]==4'h3 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_fecha==3 && pix_x[7:4]==4'h3 && ~clk_parp) color=12'hccc;					//background
+					else if (p_fecha==4 && pix_x[7:4]==4'h5 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_fecha==4 && pix_x[7:4]==4'h5 && ~clk_parp) color=12'hccc;					//background
+					else if (p_fecha==5 && pix_x[7:4]==4'h6 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_fecha==5 && pix_x[7:4]==4'h6 && ~clk_parp) color=12'hccc;					//background
+					else if (fuente_bit) color=12'h00b;
+				end
+				else if (fuente_bit) color=12'h00b;
 			end 
 		else if (On_date_c)  
 			begin CARACTER=caracter_f_c; DIR_FILA= df_f_c; DIR_BIT=db_f_c; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end
 				
 		else if (On_borde_up)
 			begin CARACTER=caracter_b_u; DIR_FILA= df_b_u; DIR_BIT=db_b_u;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		else if (On_borde_down)
 			begin CARACTER=caracter_b_d; DIR_FILA= df_b_d; DIR_BIT=db_b_d;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		else if (On_borde_left)
 			begin CARACTER=caracter_b_l; DIR_FILA= df_b_l; DIR_BIT=db_b_l;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		else if (On_borde_right)
 			begin CARACTER=caracter_b_r; DIR_FILA= df_b_r; DIR_BIT=db_b_r;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		else if (On_corner_up_left)
 			begin CARACTER=caracter_c_u_l; DIR_FILA= df_c_u_l; DIR_BIT=db_c_u_l;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		else if (On_corner_down_left)
 			begin CARACTER=caracter_c_d_l; DIR_FILA= df_c_d_l; DIR_BIT=db_c_d_l;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		else if (On_corner_up_right)
 			begin CARACTER=caracter_c_u_r; DIR_FILA= df_c_u_r; DIR_BIT=db_c_u_r;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		else if (On_corner_down_right)
 			begin CARACTER=caracter_c_d_r; DIR_FILA= df_c_d_r; DIR_BIT=db_c_d_r;
-				if (fuente_bit) color=12'hf50;				//Letras, naranja
+				if (fuente_bit) color=12'h444;				//Borde
 			end
 		
 		else if (On_hour_a)  
 			begin CARACTER=caracter_h_a; DIR_FILA= df_h_a; DIR_BIT=db_h_a; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_hour_b)  
 			begin CARACTER=caracter_h_b; DIR_FILA= df_h_b; DIR_BIT=db_h_b; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (dir_prog==0 && fuente_bit) color=12'h00b;				//Letras, navy
+				else if (dir_prog==1)
+				begin
+					if (p_hora==0 && pix_x[7:4]==4'hf && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_hora==0 && pix_x[7:4]==4'hf && ~clk_parp) color=12'hccc;					//background	
+					else if (p_hora==1 && pix_x[7:4]==4'h0 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_hora==1 && pix_x[7:4]==4'h0 && ~clk_parp) color=12'hccc;					//background
+					else if (p_hora==2 && pix_x[7:4]==4'h2 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_hora==2 && pix_x[7:4]==4'h2 && ~clk_parp) color=12'hccc;					//background
+					else if (p_hora==3 && pix_x[7:4]==4'h3 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_hora==3 && pix_x[7:4]==4'h3 && ~clk_parp) color=12'hccc;					//background
+					else if (p_hora==4 && pix_x[7:4]==4'h5 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_hora==4 && pix_x[7:4]==4'h5 && ~clk_parp) color=12'hccc;					//background
+					else if (p_hora==5 && pix_x[7:4]==4'h6 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_hora==5 && pix_x[7:4]==4'h6 && ~clk_parp) color=12'hccc;					//background
+					else if (fuente_bit) color=12'h00b;
+				end
+				else if (fuente_bit) color=12'h00b;
 			end 
 		else if (On_hour_c)  
 			begin CARACTER=caracter_h_c; DIR_FILA= df_h_c; DIR_BIT=db_h_c; 
@@ -631,11 +667,11 @@ module Caracter_selector(
 			end 
 		else if (On_hour_d) 
 			begin CARACTER=caracter_h_d; DIR_FILA= df_h_d; DIR_BIT=db_h_d; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end
 		else if (On_hour_e) 
 			begin CARACTER=caracter_h_e; DIR_FILA= df_h_e; DIR_BIT=db_h_e; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end
 		else if (On_hour_f) 
 			begin CARACTER=caracter_h_f; DIR_FILA= df_h_f; DIR_BIT=db_h_f; 
@@ -643,16 +679,33 @@ module Caracter_selector(
 			end
 		else if (On_hour_g) 
 			begin CARACTER=caracter_h_g; DIR_FILA= df_h_g; DIR_BIT=db_h_g; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end
 		
 		else if (On_cron_a) 
 			begin CARACTER=caracter_c_a; DIR_FILA= df_c_a; DIR_BIT=db_c_a; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_cron_b) 
 			begin CARACTER=caracter_c_b; DIR_FILA= df_c_b; DIR_BIT=db_c_b; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (dir_prog==0 && fuente_bit) color=12'h00b;				//Letras, navy
+				else if (dir_prog==3)
+				begin
+					if (p_crono==0 && pix_x[7:4]==4'hf && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_crono==0 && pix_x[7:4]==4'hf && ~clk_parp) color=12'hccc;					//background	
+					else if (p_crono==1 && pix_x[7:4]==4'h0 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_crono==1 && pix_x[7:4]==4'h0 && ~clk_parp) color=12'hccc;					//background
+					else if (p_crono==2 && pix_x[7:4]==4'h2 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_crono==2 && pix_x[7:4]==4'h2 && ~clk_parp) color=12'hccc;					//background
+					else if (p_crono==3 && pix_x[7:4]==4'h3 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_crono==3 && pix_x[7:4]==4'h3 && ~clk_parp) color=12'hccc;					//background
+					else if (p_crono==4 && pix_x[7:4]==4'h5 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_crono==4 && pix_x[7:4]==4'h5 && ~clk_parp) color=12'hccc;					//background
+					else if (p_crono==5 && pix_x[7:4]==4'h6 && clk_parp && fuente_bit)  color=12'h00b;				//Letras, navy
+					else if (p_crono==5 && pix_x[7:4]==4'h6 && ~clk_parp) color=12'hccc;					//background
+					else if (fuente_bit) color=12'h00b;
+				end
+				else if (fuente_bit) color=12'h00b;
 			end 
 		else if (On_cron_c)  
 			begin CARACTER=caracter_c_c; DIR_FILA= df_c_c; DIR_BIT=db_c_c; 
@@ -660,47 +713,47 @@ module Caracter_selector(
 			end
 		else if (On_cron_d)  
 			begin CARACTER=caracter_c_d; DIR_FILA= df_c_d; DIR_BIT=db_c_d; 
-				if (fuente_bit) color=12'h007;			//Letras, navy
+				if (fuente_bit) color=12'h00b;			//Letras, navy
 			end
 		else if (On_divisor_pant)
 			begin CARACTER=caracter_d_p; DIR_FILA= df_d_p; DIR_BIT=db_d_p; 
-				if (fuente_bit) color=12'h007;			//Linea divisoria
+				if (fuente_bit) color=12'h444;			//Linea divisoria
 			end
 		else if (On_prog_a)  
 			begin CARACTER=caracter_p_a; DIR_FILA= df_p_a; DIR_BIT=db_p_a; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_prog_b)  
 			begin CARACTER=caracter_p_b; DIR_FILA= df_p_b; DIR_BIT=db_p_b; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_prog_c)  
 			begin CARACTER=caracter_p_c; DIR_FILA= df_p_c; DIR_BIT=db_p_c; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end
 			
 		else if (On_desp)   
 			begin CARACTER=caracter_d; DIR_FILA= df_d; DIR_BIT=db_d; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 			
 		else if (On_flec_u)
 			begin CARACTER=caracter_a_u; DIR_FILA= df_a_u; DIR_BIT=db_a_u; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_flec_d)  
 			begin CARACTER=caracter_a_d; DIR_FILA= df_a_d; DIR_BIT=db_a_d; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_flec_r) 
 			begin CARACTER=caracter_a_r; DIR_FILA= df_a_r; DIR_BIT=db_a_r; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end 
 		else if (On_flec_l) 
 			begin CARACTER=caracter_a_l; DIR_FILA= df_a_l; DIR_BIT=db_a_l; 
-				if (fuente_bit) color=12'h007;				//Letras, navy
+				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end
-		else begin CARACTER=7'h00; DIR_BIT=pix_x[3:1]; DIR_FILA=pix_y[4:1]; color=12'hcc9; end
+		else begin CARACTER=7'h00; DIR_BIT=pix_x[3:1]; DIR_FILA=pix_y[4:1]; color=12'hccc; end
 	 end
 	 
 	 assign DIR_MEMO={CARACTER,DIR_FILA};
