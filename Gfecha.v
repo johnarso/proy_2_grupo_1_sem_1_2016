@@ -19,6 +19,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module Gfecha(
+	 input swcr,
+	 input form,
     input [7:0] dia,
 	 input [7:0] mes,
 	 input [7:0] year,
@@ -33,7 +35,7 @@ module Gfecha(
 	 
     );
 reg [5:0]cont;
-reg [1:0]contadd;
+reg [2:0]contadd;
 reg [7:0]dir;
 reg chsref;
 
@@ -49,7 +51,7 @@ begin
 	cont<=0;
 	contadd<=0;
 	chsref<=0;
-	dir<=8'h0f;
+	dir<=8'hff;
 	
 	end
 	
@@ -60,10 +62,11 @@ begin
 	if (cont==0)
 	begin
 	case (contadd)
-		2'b00:dir<=8'h24;
-		2'b01:dir<=8'h25;
-		2'b10:dir<=8'h26;
-		2'b11:dir<=8'hf1;
+		3'b000:dir<=8'h24;
+		3'b001:dir<=8'h25;
+		3'b010:dir<=8'h26;
+		3'b011:dir<=8'h00;
+		3'b100:dir<=8'hf1;
 		default dir<=8'h24;
 	endcase
 	ad<=1;
@@ -127,10 +130,16 @@ begin
 	else if (cont==23)
 		begin
 		case (contadd)
-		2'b00:ADout<=dia;
-		2'b01:ADout<=mes;
-		2'b10:ADout<=year;
-		2'b11:ADout<=8'hff;
+		3'b000:ADout<=dia;
+		3'b001:ADout<=mes;
+		3'b010:ADout<=year;
+		3'b011:begin
+					ADout[7:5]<=0;
+					ADout[4]<=form;
+					ADout[3]<=swcr;
+					ADout[2:0]<=0;
+				end
+		3'b100:ADout<=8'hff;
 		default ADout<=dia;
 		endcase
 		cont<=cont+1'b1;
@@ -150,13 +159,13 @@ begin
 		ADout<=8'hff;
 		cont<=cont+1'b1;
 		end
-	else if (cont==39&&contadd==3)
+	else if (cont==40&&contadd==4)
 		begin
 		contadd<=0;
 		cont<=0;
 		chsref<=0;
 		end
-	else if (cont==39)
+	else if (cont==40)
 		begin
 		cont<=0;
 		contadd<=contadd+1'b1;

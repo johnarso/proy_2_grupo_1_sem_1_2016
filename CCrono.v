@@ -19,9 +19,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module CCrono(
-    input [7:0] Hcr,
-    input [7:0] Mcr,
-    input [7:0] Scr,
 	 input EN,
     input BTup,
     input BTdown,
@@ -64,9 +61,6 @@ begin
 	begin
 	if (step==0)
 	begin
-		HCcr<=Hcr;
-		MCcr<=Mcr;
-		SCcr<=Scr;
 		step<=step+1'b1;
 	end
 	else if (step==1)//paso 1

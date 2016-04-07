@@ -19,9 +19,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module Gcrono(
-    input [7:0] horac,
-	 input [7:0] minc,
-	 input [7:0] segc,
+	 input final,
+	 input swC,
 	 input clock,
 	 input reset,
 	 input chs,
@@ -54,7 +53,7 @@ begin
 	
 	else if (chs>chsref) chsref<=chs;
 	
-	else if (chsref) 
+	else if (chsref&&final==1&&swC==0) 
 	begin
 	if (cont==0)
 	begin
@@ -125,13 +124,7 @@ begin
 		end
 	else if (cont==23)
 		begin
-		case (contadd)
-		2'b00:ADout<=horac;
-		2'b01:ADout<=minc;
-		2'b10:ADout<=segc;
-		2'b11:ADout<=8'hff;
-		default ADout<=horac;
-		endcase
+		ADout<=8'h00;
 		cont<=cont+1'b1;
 		end
 	else if (cont==28)
@@ -149,13 +142,13 @@ begin
 		ADout<=8'hff;
 		cont<=cont+1'b1;
 		end
-	else if (contadd==3&&cont==39)
+	else if (contadd==3&&cont==40)
 		begin
 		contadd<=0;
 		cont<=0;
 		chsref<=0;
 		end
-	else if (cont==39)
+	else if (cont==40)
 		begin
 		cont<=0;
 		contadd<=contadd+1'b1;

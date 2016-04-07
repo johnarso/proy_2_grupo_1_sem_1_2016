@@ -19,6 +19,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module Ghora(
+	 input swcr,
+	 input form,
     input [6:0] hora,
 	 input [7:0] min,
 	 input [7:0] seg,
@@ -34,7 +36,7 @@ module Ghora(
 	 
     );
 reg [5:0]cont;
-reg [1:0]contadd;
+reg [2:0]contadd;
 reg [7:0]dir;
 reg chsref;
 
@@ -60,10 +62,11 @@ begin
 	if (cont==0)
 	begin
 	case (contadd)
-		2'b00:dir<=8'h23;
-		2'b01:dir<=8'h22;
-		2'b10:dir<=8'h21; 
-		2'b11:dir<=8'hf1;
+		3'b000:dir<=8'h23;
+		3'b001:dir<=8'h22;
+		3'b010:dir<=8'h21; 
+		3'b011:dir<=8'h00;
+		3'b100:dir<=8'hf1;
 		default dir<=8'h23;
 	endcase
 	ad<=1;
@@ -127,13 +130,19 @@ begin
 	else if (cont==23)
 		begin
 		case (contadd)
-		2'b00:begin
+		3'b000:begin
 				ADout[6:0]<=hora[6:0];
 				ADout[7]<=AmPm;
 				end
-		2'b01:ADout<=min;
-		2'b10:ADout<=seg;
-		2'b11:ADout<=8'hff;
+		3'b001:ADout<=min;
+		3'b010:ADout<=seg;
+		3'b011:begin
+					ADout[7:5]<=0;
+					ADout[4]<=form;
+					ADout[3]<=swcr;
+					ADout[2:0]<=0;
+				end
+		3'b100:ADout<=8'hff;
 		default ADout<=hora;
 		endcase
 		cont<=cont+1'b1;
@@ -153,13 +162,13 @@ begin
 		ADout<=8'hff;
 		cont<=cont+1'b1;
 		end
-	else if (cont==39&&contadd==3)
+	else if (cont==40&&contadd==4)
 		begin
 		contadd<=0;
 		cont<=0;
 		chsref<=0;
 		end
-	else if (cont==39)
+	else if (cont==40)
 		begin
 		cont<=0;
 		contadd<=contadd+1'b1;

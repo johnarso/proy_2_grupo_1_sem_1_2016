@@ -38,7 +38,7 @@ module Ext_datos(
 	 output reg [7:0]mincrono,
 	 output reg [7:0]segcrono,
 	 output reg AmPm,
-	 output reg timer
+	 output reg Pup
     );
 reg [5:0]cont;
 reg [3:0]contadd;
@@ -67,8 +67,8 @@ begin
 	mincrono<=0;
 	segcrono<=0;
 	chsref<=0;
-	timer<=0;
 	dir<=8'hff;
+	Pup<=0;
 	
 	end
 	else if (chs>chsref) chsref<=chs;
@@ -87,13 +87,13 @@ begin
 		4'b0111:dir<=8'h43;
 		4'b1000:dir<=8'h42;
 		4'b1001:dir<=8'h41;
-		4'b1010:dir<=8'h01;
 		default dir<=8'hf0;
 	endcase
 	ad<=1;
 	wr<=1;
 	rd<=1;
 	cs<=1;
+	Pup<=0;
 	cont<=cont+1'b1;
 	end
 		
@@ -114,6 +114,7 @@ begin
 		end
 	else if (cont==4)
 		begin
+		Pup<=0;
 		ADout<=dir;
 		cont<=cont+1'b1;
 		end
@@ -135,6 +136,7 @@ begin
 	else if (cont==13)
 		begin
 		ADout<=8'hff;
+		Pup<=1;
 		cont<=cont+1'b1;
 		end
 	else if (cont==21)
@@ -155,6 +157,7 @@ begin
 		4'b0011:dia<=ADin;
 		4'b0100:begin
 					hora[6:0]<=ADin[6:0];
+					hora[7]<=0;
 					AmPm<=ADin[7];
 					hora[7]<=0;
 					end
@@ -163,8 +166,7 @@ begin
 		4'b0111:horacrono<=ADin;
 		4'b1000:mincrono<=ADin;
 		4'b1001:segcrono<=ADin;
-		4'b1010:timer<=ADin[6];
-		default ADout<=ADin;
+		default ADout<=8'hff;
 		endcase
 		cont<=cont+1'b1;
 		end
@@ -178,18 +180,19 @@ begin
 		cs<=1;
 		cont<=cont+1'b1;
 		end
-	else if (cont==39)
+	else if (cont==40)
 		begin
 		cont<=0;
 		contadd<=contadd+1'b1;
 		end
 	else cont<=cont+1'b1;
 	
-	if (contadd==11)
+	if (contadd==10)
 		begin
 		contadd<=0;
 		cont<=0;
 		chsref<=0;
+		Pup<=0;
 		end
 	
 	end
