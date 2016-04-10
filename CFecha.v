@@ -119,6 +119,7 @@ begin
 			if (varin==3 && contador==0)varout<=0;
 			else if (varin==1&&contador==1&&diaC[7:4]==3)varout<=0;
 			else if(varin==1 && contador==2)varout<=0;
+			else if (varin==2 &&contador==3&&mesC[7:4]==1)varout<=0;
 			else if (varin==9)
 				begin
 				if (contador==1&&diaC[7:4]==0)varout<=1;
@@ -128,6 +129,16 @@ begin
 				end
 			else if (varin==2 && mesC==2 && contador==0) varout<=0;
 			else if ((mesC==4 || mesC==6 || mesC==9 || mesC==11)&&varin==0&&contador==1&&diaC[7:4]==3)varout<=0;
+			else if (varin==2&&contador==0)
+				begin
+				varout<=3;
+				diaC[3:0]<=0;
+				end
+			else if(varin==0 && contador==2)
+				begin
+				varout<=1;
+				mesC[3:0]<=0;
+				end
 			else varout<=varin+1'b1;
 			BTupref<=BTup;
 		end
@@ -140,8 +151,17 @@ begin
 			if (contador==1&&diaC[7:4]==3&&(mesC==4 || mesC==6 || mesC==9 || mesC==11))varout<=0;
 			else if (contador==1&&diaC[7:4]==3)varout<=1;
 			else if(contador==0&&mesC==2)varout<=2;
-			else if (contador==2)varout<=1;
+			else if (contador==2)
+				begin
+				varout<=1;
+				mesC<=0;
+				end
 			else if (contador==3&&mesC[7:4]==1)varout<=2;
+			else if (contador==0)
+				begin
+				varout<=3;
+				diaC[3:0]<=0;
+				end
 			else varout<=9;
 			end
 			else if (varin==1)
@@ -149,6 +169,8 @@ begin
 				if (contador==1&&diaC[7:4]==0)varout<=9;
 				else if (contador==3&&mesC[7:4]==0)varout<=9;
 				else if (contador==5&&yearC[7:4]==0)varout<=9;
+				else if (contador==1&&diaC[7:4]!=0)varout<=0;
+				else varout<=0;
 				end
 			else varout<=varin-1'b1;
 			BTdownref<=BTdown;

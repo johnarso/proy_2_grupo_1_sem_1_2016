@@ -27,11 +27,11 @@ module Contador(
 	 
 	 reg [0:0] cont;
 	 reg [23:0] divisor;
-	 
+	
 	 //Para generar a partir de 100 MHz los 25 MHz que se utilizan en pantalla 640x480
 	 //Además genera el clock para el parpadeo a 4Hz
 	 
-	 always @(posedge CLK_NX)
+	 always @(posedge CLK_NX, posedge reset)
 	 begin
 		if (reset)
 		begin
@@ -39,6 +39,7 @@ module Contador(
 			cont=0;
 			divisor=24'h0000;
 			clk_RING=0;
+			
 			
 		end
 		
@@ -50,12 +51,15 @@ module Contador(
 				pixel_rate=~pixel_rate;
 			end
 			else cont=cont+1'd1;
+			
 			if(divisor==24'd12499999)
 			begin
 				divisor=24'd0;
 				clk_RING=~clk_RING;
 			end
 			else divisor=divisor+24'd1;
+			
+			
 		end
 	 end
 

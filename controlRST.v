@@ -22,11 +22,12 @@ module controlRTC(
     input SWhora,SWfecha,SWcrono,SWiniC,SWf,up,dwn,lf,rg,rst,clk,
 	 input [7:0]ADin,
 	 output [7:0]ADout,
-	 output ad,wr,cs,rd,AMPM,
+	 output ad,wr,cs,rd,AMPM, 
     output [7:0]hora,min,seg,d,me,y,horacr,mincr,segcr,horapr,minpr,segpr,
 	 output [2:0]cursgcrono,cursghora,cursgfecha,
 	 output [1:0]Smuxdt,
-	 output Pullup,tim
+	 output Pullup,tim,
+	 output formato
     );
 wire ENch,ENcf,ENcc,ENgh,ENgf,ENgc,ENed,ENci,ENcomp,lck;
 wire ap1,ap2;
@@ -89,5 +90,6 @@ ComparadorC instCompC(.CprogH(horapr),.CprogM(minpr),.CprogS(segpr),.CcountH(hor
 							 .CcountM(mincr),.CcountS(segcr),.en(ENcomp),.reset(rst),.clock(clk),.fin(final) );
 
 assign tim=final;
+assign formato=fmt;
 
 endmodule

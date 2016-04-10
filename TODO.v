@@ -18,9 +18,12 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module TODO(
-	input [2:0] sw,
+module VGA(
 	input relojsito, resetito,
+	input [1:0] direc_prog,
+	input [2:0] prog_crono, prog_fecha, prog_hora,
+	input finale, tempo, formaggio,
+	input [7:0] h_oro, m_oro, s_oro, giorno, messe, agno, ora, minute, secondo, h_run, m_run, s_run,
 	output [11:0] colorsito,
 	output hsito, vsito
     );
@@ -28,9 +31,6 @@ module TODO(
 	 wire relojsita, resetita;
 	 assign relojsita=relojsito;
 	 assign resetita=resetito;
-	 
-	 wire finale, tempo, formaggio;
-	 wire [7:0] h_oro, m_oro, s_oro, giorno, messe, agno, ora, minute, secondo, h_run, m_run, s_run;
 	 
 	 wire PT;
 	 wire [11:0] rgb_next;
@@ -40,22 +40,8 @@ module TODO(
 	 
 	 wire [9:0] x_p, y_p;
 	 
-	 wire [2:0] swit;
-	 assign swit=sw;
 	 wire medio_seg;
-	 
-	 wire [1:0] direc_prog;
-	 wire [2:0] prog_crono, prog_fecha, prog_hora;
-	 
-	Prueba inst_prueba(
-	.SW(swit),
-	.d_pg(direc_prog),
-	.p_cr(prog_crono), .p_fe(prog_fecha),.p_ho(prog_hora),
-	.CRONO_FIN(finale), .AMPM(tempo), .FORMATO(formaggio),
-	.HREL(h_oro), .MREL(m_oro), .SREL(s_oro), .DIA(giorno), .MES(messe), .ANIO(agno), 
-	.HRUN(h_run), .MRUN(m_run), .SRUN(s_run),
-	.HCRON(ora), .MCRON(minute),.SCRON(secondo)
-    );
+	
 	 
 	 Caracter_selector inst_selector_char(
     .NEXYS_CLOCK(relojsita), .clk_parp(medio_seg),
@@ -106,6 +92,7 @@ module TODO(
 			 end
 		 end
 		 assign colorsito=rgb_reg;
+		
 	 
 	 
 endmodule

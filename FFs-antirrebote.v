@@ -46,6 +46,7 @@ reg [8:0]pas3;
 reg [8:0]pas4;
 reg [8:0]pas5;
 reg [8:0]pas6;
+reg [7:0]delay;
 
 always @(posedge clk)
 if (reset)
@@ -65,8 +66,9 @@ if (reset)
 	prf<=1'b0;
 	prc<=1'b0;
 	icr<=1'b0;
+	delay<=0;
 	end
-else
+else if (delay==0)
 	begin
 	pas1[0]<=aumentar;
 	pas1[1]<=disminuir;
@@ -134,7 +136,7 @@ else
 		l<=pas6[2];
 	if (pas1[3]==pas2[3]&&pas1[3]==pas3[3]&&pas1[3]==pas4[3]&&pas1[3]==pas5[3]&&pas1[3]==pas6[3])
 		r<=pas6[3];
-	if (pas1[4]==pas2[4]&&pas1[4]==pas3[2]&&pas1[4]==pas4[4]&&pas1[4]==pas5[4]&&pas1[4]==pas6[4])
+	if (pas1[4]==pas2[4]&&pas1[4]==pas3[4]&&pas1[4]==pas4[4]&&pas1[4]==pas5[4]&&pas1[4]==pas6[4])
 		f<=pas6[4];
 	if (pas1[5]==pas2[5]&&pas1[5]==pas3[5]&&pas1[5]==pas4[5]&&pas1[5]==pas5[5]&&pas1[5]==pas6[5])
 		prh<=pas6[5];
@@ -144,5 +146,8 @@ else
 		prc<=pas6[7];
 	if (pas1[8]==pas2[8]&&pas1[8]==pas3[8]&&pas1[8]==pas4[8]&&pas1[8]==pas5[8]&&pas1[8]==pas6[8])
 		icr<=pas6[8];
+	delay<=delay+1'b1;
 	end
+	else if(delay==200)delay<=0;
+	else 	delay<=delay+1'b1;
 endmodule

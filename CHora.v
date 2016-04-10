@@ -125,15 +125,27 @@ begin
 		
 		if (BTup>BTupref)
 		begin
-			if ((contador==1||contador==3||contador==5)&&varin==9)varout<=0;
+			if (contador==1&&HC[7:4]==1&&Format==1&&varin==2)varout<=0;
+			else if (contador==1&&HC[7:4]==2&&Format==0&&varin==4)varout<=0;
+			else if ((contador==1||contador==3||contador==5)&&varin==9)varout<=0;
 			else if (contador==0 && Format==1 && varin==1)
 				begin
 				varout<=0;
 				AmPm<=~AmPm;
 				end
-			else if (contador==1&&HC[7:4]==1&&Format==1&&varin==2)varout<=0;
 			else if (varin==2 && contador==0)varout<=0;
 			else if ((contador==2||contador==4)&&varin==5)varout<=0;
+			else if (contador==0 && Format==1 && varin==0)
+				begin
+				varout<=1;
+				HC[3:0]<=0;
+				end
+			else if (contador==0 && Format==0 && varin==1)
+				begin
+				varout<=2;
+				HC[3:0]<=0;
+				end
+			
 			else varout<=varin+1'b1;
 			BTupref<=BTup;
 		end
@@ -142,11 +154,20 @@ begin
 		begin
 			if (varin==0)
 				begin
-				if(contador==0 && Format==1)varout<=1;
-				else if (contador==0)varout<=2;
+				if(contador==0 && Format==1)
+					begin
+					varout<=1;
+					HC[3:0]<=0;
+					end
+				else if (contador==0&&Format==0)
+					begin
+					varout<=2;
+					HC[3:0]<=0;
+					end
+				else if (contador==1&&HC[7:4]==2&&Format==0)varout<=4;
+				else if (contador==1&&HC[7:4]==1&&Format==1)varout<=2;
 				else if (contador==1||contador==3||contador==5)	varout<=9;
 				else if (contador==2||contador==4)varout<=5;
-				else if (contador==1&&HC[7:4]==1&&Format==1)varout<=2;
 				end
 			else varout<=varin-1'b1;
 			BTdownref<=BTdown;

@@ -111,9 +111,14 @@ begin
 		begin
 			if (varin==5&&(contador==2||contador==4))varout<=0;
 			else if (varin==9&&(contador==3||contador==5))varout<=0;
+			else if (contador==0&&varin==1)
+				begin
+				varout<=2;
+				HCcr[3:0]<=0;
+				end
 			else if (varin==2 && contador==0)varout<=0;
-			else if (varin==9 && contador==1)varout<=0;
 			else if (varin==4 && contador==1 && HCcr==2)varout<=0;
+			else if (varin==9 && contador==1)varout<=0;
 			else varout<=varin+1'b1;
 			BTupref<=BTup;
 		end
@@ -123,7 +128,11 @@ begin
 		begin
 			if (varin==0)
 			begin
-				if (contador==0)varout<=2;
+				if (contador==0)
+					begin
+					varout<=2;
+					HCcr<=0;
+					end
 				else if (contador==1&&HCcr[7:4]==2)varout<=4;
 				else if (contador==1)varout<=9;
 				else if (contador==2||contador==4)varout<=5;

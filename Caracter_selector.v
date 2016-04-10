@@ -36,7 +36,7 @@ module Caracter_selector(
 	 wire On_date_a, On_date_b, On_date_c;
 	 wire On_hour_a, On_hour_b, On_hour_c, On_hour_d, On_hour_e, On_hour_f, On_hour_g;
 	 wire On_cron_a, On_cron_b, On_cron_c, On_cron_d;
-	 wire On_prog_a, On_prog_b, On_prog_c;
+	 wire On_prog_a, On_prog_b, On_prog_c, On_prog_d, On_prog_e;
 	 wire On_flec_u, On_flec_d, On_flec_r, On_flec_l;
 	 wire On_desp;
 	 wire On_null;
@@ -47,7 +47,7 @@ module Caracter_selector(
 	 wire [2:0] db_f_a, db_f_b, db_f_c;
 	 wire [2:0] db_h_a, db_h_b, db_h_c, db_h_d, db_h_e, db_h_f, db_h_g;
 	 wire [2:0] db_c_a, db_c_b, db_c_c, db_c_d;
-	 wire [2:0] db_p_a, db_p_b, db_p_c;
+	 wire [2:0] db_p_a, db_p_b, db_p_c, db_p_d, db_p_e;
 	 wire [2:0] db_d;
 	 wire [2:0] db_a_u, db_a_d, db_a_r, db_a_l;
 	 wire [2:0] db_d_p;
@@ -58,7 +58,7 @@ module Caracter_selector(
 	 wire [3:0] df_f_a, df_f_b, df_f_c;
 	 wire [3:0] df_h_a, df_h_b, df_h_c, df_h_d, df_h_e, df_h_f, df_h_g;
 	 wire [3:0] df_c_a, df_c_b, df_c_c, df_c_d;
-	 wire [3:0] df_p_a, df_p_b, df_p_c;
+	 wire [3:0] df_p_a, df_p_b, df_p_c, df_p_d, df_p_e;
 	 wire [3:0] df_d;
 	 wire [3:0] df_a_u, df_a_d, df_a_r, df_a_l;
 	 wire [3:0] df_d_p;
@@ -69,7 +69,7 @@ module Caracter_selector(
 	 reg [6:0] caracter_f_a, caracter_f_b, caracter_f_c;
 	 reg [6:0] caracter_h_a, caracter_h_b, caracter_h_c, caracter_h_d, caracter_h_e, caracter_h_f, caracter_h_g;
 	 reg [6:0] caracter_c_a, caracter_c_b, caracter_c_c, caracter_c_d;
-	 reg [6:0] caracter_p_a, caracter_p_b, caracter_p_c;
+	 reg [6:0] caracter_p_a, caracter_p_b, caracter_p_c, caracter_p_d, caracter_p_e;
 	 reg [6:0] caracter_d;
 	 reg [6:0] caracter_a_u, caracter_a_d, caracter_a_r, caracter_a_l;
 	 reg [6:0] CARACTER;
@@ -427,78 +427,133 @@ module Caracter_selector(
 		endcase
 	 end
 	 
-	 assign On_prog_a= (pix_y[9:5]==5'd9) && (6'd2<=pix_x[9:4]) && (pix_x[9:4]<6'd19);
+	 assign On_prog_a= (pix_y[9:5]==5'd10) && (6'd2<=pix_x[9:4]) && (pix_x[9:4]<6'd19);
 	 assign db_p_a=pix_x[3:1];
 	 assign df_p_a=pix_y[4:1];
 	 always @*
 	 begin
-		case (pix_x[7:4])
-			4'h3: caracter_p_a = 7'h50;	//P
-			4'h4: caracter_p_a = 7'h72;	//r
-			4'h5: caracter_p_a = 7'h6f;	//o
-			4'h6: caracter_p_a = 7'h67;	//g
-			4'h7: caracter_p_a = 7'h2e;	//.
-			4'h8: caracter_p_a = 7'h00;	//
-			4'h9: caracter_p_a = 7'h66;	//f
-			4'ha: caracter_p_a = 7'h65;	//e
-			4'hb: caracter_p_a = 7'h63;	//c
-			4'hc: caracter_p_a = 7'h68;	//h
-			4'hd: caracter_p_a = 7'h61;	//a
-			4'he: caracter_p_a = 7'h00;	//
-			4'hf: caracter_p_a = 7'h53;	//S
-			4'h0: caracter_p_a = 7'h57;	//W
-			4'h1: caracter_p_a = 7'h31;	//1
+		case (pix_x[8:4])
+			5'h03: caracter_p_a = 7'h50;	//P
+			5'h04: caracter_p_a = 7'h72;	//r
+			5'h05: caracter_p_a = 7'h6f;	//o
+			5'h06: caracter_p_a = 7'h67;	//g
+			5'h07: caracter_p_a = 7'h2e;	//.
+			5'h08: caracter_p_a = 7'h00;	//
+			5'h09: caracter_p_a = 7'h66;	//f
+			5'h0a: caracter_p_a = 7'h65;	//e
+			5'h0b: caracter_p_a = 7'h63;	//c
+			5'h0c: caracter_p_a = 7'h68;	//h
+			5'h0d: caracter_p_a = 7'h61;	//a
+			5'h0e: caracter_p_a = 7'h00;	//
+			5'h0f: caracter_p_a = 7'h00;	//
+			5'h10: caracter_p_a = 7'h53;	//S
+			5'h11: caracter_p_a = 7'h57;	//W
+			5'h12: caracter_p_a = 7'h32;	//2
 			default: caracter_p_a=7'h00;	//
 		endcase
 	 end
 	 
-	 assign On_prog_b= (pix_y[9:5]==5'd11) && (2<=pix_x[9:4]) && (pix_x[9:4]<19);
+	 assign On_prog_b= (pix_y[9:5]==5'd9) && (2<=pix_x[9:4]) && (pix_x[9:4]<19);
 	 assign db_p_b=pix_x[3:1];
 	 assign df_p_b=pix_y[4:1];
 	 always @*
 	 begin
-		case (pix_x[7:4])
-			4'h3: caracter_p_b = 7'h50;	//P
-			4'h4: caracter_p_b = 7'h72;	//r
-			4'h5: caracter_p_b = 7'h6f;	//o
-			4'h6: caracter_p_b = 7'h67;	//g
-			4'h7: caracter_p_b = 7'h2e;	//.
-			4'h8: caracter_p_b = 7'h00;	//
-			4'h9: caracter_p_b = 7'h68;	//h
-			4'ha: caracter_p_b = 7'h6f;	//o
-			4'hb: caracter_p_b = 7'h72;	//r
-			4'hc: caracter_p_b = 7'h61;	//a
-			4'hd: caracter_p_b = 7'h00;	//
-			4'he: caracter_p_b = 7'h00;	//
-			4'hf: caracter_p_b = 7'h53;	//S
-			4'h0: caracter_p_b = 7'h57;	//W
-			4'h1: caracter_p_b = 7'h32;	//2
+		case (pix_x[8:4])
+			5'h03: caracter_p_b = 7'h50;	//P
+			5'h04: caracter_p_b = 7'h72;	//r
+			5'h05: caracter_p_b = 7'h6f;	//o
+			5'h06: caracter_p_b = 7'h67;	//g
+			5'h07: caracter_p_b = 7'h2e;	//.
+			5'h08: caracter_p_b = 7'h00;	//
+			5'h09: caracter_p_b = 7'h68;	//h
+			5'h0a: caracter_p_b = 7'h6f;	//o
+			5'h0b: caracter_p_b = 7'h72;	//r
+			5'h0c: caracter_p_b = 7'h61;	//a
+			5'h0d: caracter_p_b = 7'h00;	//
+			5'h0e: caracter_p_b = 7'h00;	//
+			5'h0f: caracter_p_b = 7'h00;	//
+			5'h10: caracter_p_b = 7'h53;	//S
+			5'h11: caracter_p_b = 7'h57;	//W
+			5'h12: caracter_p_b = 7'h31;	//1
 			default: caracter_p_b=7'h00;	//
 		endcase
 	 end
 	 
-	 assign On_prog_c= (pix_y[9:5]==5'd13) && (2<=pix_x[9:4]) && (pix_x[9:4]<19);
+	 assign On_prog_c= (pix_y[9:5]==5'd11) && (2<=pix_x[9:4]) && (pix_x[9:4]<19);
 	 assign db_p_c=pix_x[3:1];
 	 assign df_p_c=pix_y[4:1];
 	 always @*
 	 begin
-		case (pix_x[7:4])
-			4'h3: caracter_p_c = 7'h50;	//P
-			4'h4: caracter_p_c = 7'h72;	//r
-			4'h5: caracter_p_c = 7'h6f;	//o
-			4'h6: caracter_p_c = 7'h67;	//g
-			4'h7: caracter_p_c = 7'h2e;	//.
-			4'h8: caracter_p_c = 7'h00;	//
-			4'h9: caracter_p_c = 7'h63;	//c
-			4'ha: caracter_p_c = 7'h72;	//r
-			4'hb: caracter_p_c = 7'h6f;	//o
-			4'hc: caracter_p_c = 7'h6e;	//n
-			4'hd: caracter_p_c = 7'h6f;	//o
-			4'he: caracter_p_c = 7'h00;	//
-			4'hf: caracter_p_c = 7'h53;	//S
-			4'h0: caracter_p_c = 7'h57;	//W
-			4'h1: caracter_p_c = 7'h33;	//3
+		case (pix_x[8:4])
+			5'h03: caracter_p_c = 7'h50;	//P
+			5'h04: caracter_p_c = 7'h72;	//r
+			5'h05: caracter_p_c = 7'h6f;	//o
+			5'h06: caracter_p_c = 7'h67;	//g
+			5'h07: caracter_p_c = 7'h2e;	//.
+			5'h08: caracter_p_c = 7'h00;	//
+			5'h09: caracter_p_c = 7'h63;	//c
+			5'h0a: caracter_p_c = 7'h72;	//r
+			5'h0b: caracter_p_c = 7'h6f;	//o
+			5'h0c: caracter_p_c = 7'h6e;	//n
+			5'h0d: caracter_p_c = 7'h6f;	//o
+			5'h0e: caracter_p_c = 7'h00;	//
+			5'h0f: caracter_p_c = 7'h00;	//
+			5'h10: caracter_p_c = 7'h53;	//S
+			5'h11: caracter_p_c = 7'h57;	//W
+			5'h12: caracter_p_c = 7'h33;	//3
 			default: caracter_p_c=7'h00;	//
+		endcase
+	 end
+	 
+	 assign On_prog_d= (pix_y[9:5]==5'd12) && (2<=pix_x[9:4]) && (pix_x[9:4]<19);
+	 assign db_p_d=pix_x[3:1];
+	 assign df_p_d=pix_y[4:1];
+	 always @*
+	 begin
+		case (pix_x[8:4])
+			5'h03: caracter_p_d = 7'h49;	//I
+			5'h04: caracter_p_d = 7'h6e;	//n
+			5'h05: caracter_p_d = 7'h69;	//i
+			5'h06: caracter_p_d = 7'h63;	//c
+			5'h07: caracter_p_d = 7'h69;	//i
+			5'h08: caracter_p_d = 7'h6f;	//o
+			5'h09: caracter_p_d = 7'h00;	//
+			5'h0a: caracter_p_d = 7'h63;	//c
+			5'h0b: caracter_p_d = 7'h72;	//r
+			5'h0c: caracter_p_d = 7'h6f;	//o
+			5'h0d: caracter_p_d = 7'h6e;	//n
+			5'h0e: caracter_p_d = 7'h6f;	//o
+			5'h0f: caracter_p_d = 7'h00;	// 
+			5'h10: caracter_p_d = 7'h53;	//S
+			5'h11: caracter_p_d = 7'h57;	//W
+			5'h12: caracter_p_d = 7'h36;	//6
+			default: caracter_p_d=7'h00;	//
+		endcase
+	 end
+	 
+	 assign On_prog_e= (pix_y[9:5]==5'd13) && (2<=pix_x[9:4]) && (pix_x[9:4]<19);
+	 assign db_p_e=pix_x[3:1];
+	 assign df_p_e=pix_y[4:1];
+	 always @*
+	 begin
+		case (pix_x[8:4])
+			5'h03: caracter_p_e = 7'h46;	//F
+			5'h04: caracter_p_e = 7'h6f;	//o
+			5'h05: caracter_p_e = 7'h72;	//r
+			5'h06: caracter_p_e = 7'h6d;	//m
+			5'h07: caracter_p_e = 7'h61;	//a
+			5'h08: caracter_p_e = 7'h74;	//t
+			5'h09: caracter_p_e = 7'h6f;	//o
+			5'h0a: caracter_p_e = 7'h00;	//
+			5'h0b: caracter_p_e = 7'h68;	//h
+			5'h0c: caracter_p_e = 7'h6f;	//o
+			5'h0d: caracter_p_e = 7'h72;	//r
+			5'h0e: caracter_p_e = 7'h61;	//a
+			5'h0f: caracter_p_e = 7'h00;	// 
+			5'h10: caracter_p_e = 7'h53;	//S
+			5'h11: caracter_p_e = 7'h57;	//W
+			5'h12: caracter_p_e = 7'h38;	//8
+			default: caracter_p_e=7'h00;	//
 		endcase
 	 end
 	 
@@ -731,7 +786,15 @@ module Caracter_selector(
 			begin CARACTER=caracter_p_c; DIR_FILA= df_p_c; DIR_BIT=db_p_c; 
 				if (fuente_bit) color=12'h00b;				//Letras, navy
 			end
-			
+		else if (On_prog_d)  
+			begin CARACTER=caracter_p_d; DIR_FILA= df_p_d; DIR_BIT=db_p_d; 
+				if (fuente_bit) color=12'h00b;				//Letras, navy
+			end
+		else if (On_prog_e)  
+			begin CARACTER=caracter_p_e; DIR_FILA= df_p_e; DIR_BIT=db_p_e; 
+				if (fuente_bit) color=12'h00b;				//Letras, navy
+			end
+		
 		else if (On_desp)   
 			begin CARACTER=caracter_d; DIR_FILA= df_d; DIR_BIT=db_d; 
 				if (fuente_bit) color=12'h00b;				//Letras, navy
