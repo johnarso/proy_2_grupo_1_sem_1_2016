@@ -26,8 +26,7 @@ module Sistema(
 	 output [7:0] AD_OUT,
 	 output [11:0] COLORES,
 	 output H_syncro, V_syncro, 
-	 output R_D, C_S, W_R, A_D, 
-	 output terminal
+	 output R_D, C_S, W_R, A_D
 	 );
 	 
 	 
@@ -42,16 +41,16 @@ module Sistema(
 	 wire r_lent;
 	 
 	VGA controlador_vga(
-	.relojsito(CLOCK_NEXYS), .resetito(switch[5]),
+	.reloj_nexys(CLOCK_NEXYS), .reset_total(switch[5]),
 	.direc_prog(lugar_program),
 	.prog_crono(cursor_crono), .prog_fecha(cursor_fecha), .prog_hora(cursor_hora),
-	.finale(final_cronom), .tempo(am_pm_bandera), .formaggio(formato_hora),
+	.finale(final_cronom), .tempo(am_pm_bandera), .formatto(formato_hora),
 	.h_oro(reloj_hora), .m_oro(reloj_minuto), .s_oro(reloj_segundo), 
 	.giorno(fecha_dia), .messe(fecha_mes), .agno(fecha_anio),
 	.ora(pr_hora), .minute(pr_minuto), .secondo(pr_segundo), 
 	.h_run(crono_hora), .m_run(crono_minuto), .s_run(crono_segundo),
-	.colorsito(COLORES),
-	.hsito(H_syncro), .vsito(V_syncro)
+	.color_salida(COLORES),
+	.hsincro(H_syncro), .vsincro(V_syncro)
     );
 	 
 	 controlRTC controlador_rtc(
@@ -70,5 +69,4 @@ module Sistema(
     );
 
 assign AD_OUT = (~PUP) ? ADOUT : 8'hzz;
-assign terminal=CLOCK_NEXYS;
 endmodule

@@ -105,10 +105,3 @@ NET "C_S" LOC = E7;
 NET "W_R" LOC = J3;
 NET "R_D" LOC = J4;
 
-# PlanAhead Generated physical constraints 
-
-NET "terminal" LOC = G6;
-
-# PlanAhead Generated IO constraints 
-
-NET "terminal" IOSTANDARD = LVCMOS33;

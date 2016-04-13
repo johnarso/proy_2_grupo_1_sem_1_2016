@@ -19,18 +19,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module VGA(
-	input relojsito, resetito,
+	input reloj_nexys, reset_total,
 	input [1:0] direc_prog,
 	input [2:0] prog_crono, prog_fecha, prog_hora,
-	input finale, tempo, formaggio,
+	input finale, tempo, formatto,
 	input [7:0] h_oro, m_oro, s_oro, giorno, messe, agno, ora, minute, secondo, h_run, m_run, s_run,
-	output [11:0] colorsito,
-	output hsito, vsito
+	output [11:0] color_salida,
+	output hsincro, vsincro
     );
 	 
-	 wire relojsita, resetita;
-	 assign relojsita=relojsito;
-	 assign resetita=resetito;
+	 wire reloj_interno, reset_interno;
+	 assign reloj_interno=reloj_nexys;
+	 assign reset_interno=reset_total;
 	 
 	 wire PT;
 	 wire [11:0] rgb_next;
@@ -44,10 +44,10 @@ module VGA(
 	
 	 
 	 Caracter_selector inst_selector_char(
-    .NEXYS_CLOCK(relojsita), .clk_parp(medio_seg),
+    .NEXYS_CLOCK(reloj_interno), .clk_parp(medio_seg),
 	 .dir_prog(direc_prog),
 	 .p_crono(prog_crono), .p_fecha(prog_fecha), .p_hora(prog_hora),
-	 .crono_end(parpa_parpa), .am_pm(tempo), .formato(formaggio),
+	 .crono_end(parpadeo), .am_pm(tempo), .formato(formatto),
 	 .hora(h_oro), .min(m_oro), .seg(s_oro), .dia(giorno), .mes(messe), .year(agno), 
 	 .hcrono_run(h_run), .mcrono_run(m_run), .scrono_run(s_run), 
 	 .hcrono(ora), .mcrono(minute), .scrono(secondo),
@@ -57,15 +57,15 @@ module VGA(
 	 );
 	 
 	 Contador inst_25MHz(
-    .CLK_NX(relojsita),
-	 .reset(resetita),
+    .CLK_NX(reloj_interno),
+	 .reset(reset_interno),
 	 .pixel_rate(PT),
 	 .clk_RING(medio_seg)
 	 );
 	 
 	 Sincronizador inst_sync(
-    .reset(resetita), .CLK_pix_rate(PT),
-	 .h_sync(hsito), .v_sync(vsito), .video_on(ON_VID),
+    .reset(reset_interno), .CLK_pix_rate(PT),
+	 .h_sync(hsincro), .v_sync(vsincro), .video_on(ON_VID),
 	 .pixel_x(x_p), .pixel_y(y_p)
 	 );
 	 
@@ -76,14 +76,14 @@ module VGA(
 	 );
 	 
 	 Generador_RING inst_parpadeo(
-    .CLK_Ring(medio_seg), .reset(resetita),
+    .CLK_Ring(medio_seg), .reset(reset_interno),
 	 .fin_crono(finale),
-	 .band_parp(parpa_parpa)
+	 .band_parp(parpadeo)
 	 );
 	 
-		always @(posedge relojsita, posedge resetita)
+		always @(posedge reloj_interno, posedge reset_interno)
 		 begin
-			 if(resetita)
+			 if(reset_interno)
 				rgb_reg<=12'hfff;
 			 else
 			 begin
@@ -91,7 +91,7 @@ module VGA(
 					rgb_reg<=rgb_next;
 			 end
 		 end
-		 assign colorsito=rgb_reg;
+		 assign color_salida=rgb_reg;
 		
 	 
 	 
