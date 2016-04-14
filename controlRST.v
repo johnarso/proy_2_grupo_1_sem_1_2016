@@ -40,7 +40,7 @@ wire [2:0]Smuxctr;
 inicializacion instini(.clock(clk),.reset(rst),.cs(ctrl1[9]),.ad(ctrl1[11]),.rd(ctrl1[10]),.wr(ctrl1[8]),.ADout(ctrl1[7:0]) );
 
 chcronoformatlock instchcrfolo(.clock(clk),.reset(rst),.enc(ENci), 
-										.inic(SWiniC),.format(SWf),.lock(lck),.fin(final),
+										.inic(SWiniC),.format(SWf),.lock(lck),
 										.ad(ctrl2[11]),.wr(ctrl2[8]),.cs(ctrl2[9]),
 										.rd(ctrl2[10]),.ADout(ctrl2[7:0]) );
 
