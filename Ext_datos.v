@@ -139,17 +139,17 @@ begin
 		Pup<=1;
 		cont<=cont+1'b1;
 		end
-	else if (cont==21)
+	else if (cont==31)
 		begin
 		cs<=0;
 		cont<=cont+1'b1;
 		end
-	else if (cont==22)
+	else if (cont==32)
 		begin
 		rd<=0;
 		cont<=cont+1'b1;
 		end
-	else if (cont==27)
+	else if (cont==40)
 		begin
 		case (contadd)
 		4'b0001:year<=ADin;
@@ -170,17 +170,17 @@ begin
 		endcase
 		cont<=cont+1'b1;
 		end
-	else if (cont==28)
+	else if (cont==42)
 		begin
 		rd<=1;
 		cont<=cont+1'b1;
 		end
-	else if (cont==29)
+	else if (cont==43)
 		begin
 		cs<=1;
 		cont<=cont+1'b1;
 		end
-	else if (cont==40)
+	else if (cont==53)
 		begin
 		cont<=0;
 		contadd<=contadd+1'b1;

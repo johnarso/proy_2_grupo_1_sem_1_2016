@@ -25,6 +25,7 @@ module chcronoformatlock(
 	 input inic,
 	 input format,
 	 input lock,
+	 input fin,
     output reg ad,
     output reg wr,
     output reg cs,
@@ -114,7 +115,8 @@ begin
 		ADout[0]<=0;
 		ADout[1]<=0;
 		ADout[2]<=0;
-		ADout[3]<=inic;
+		if (fin)ADout[3]<=0;
+		else ADout[3]<=inic;
 		ADout[4]<=format;
 		ADout[5]<=lock;
 		ADout[6]<=0;
