@@ -206,7 +206,7 @@ always @(posedge clock)
 			end
 		
 		else contador<=contador+1'b1;
-		if (contEdatos==12500000)contEdatos<=0;
+		if (contEdatos==6250000)contEdatos<=0;
 		if(Pcrono==0)ENccrono<=0;
 		
 	end

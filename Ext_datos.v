@@ -149,7 +149,8 @@ begin
 		rd<=0;
 		cont<=cont+1'b1;
 		end
-	else if (cont==27)
+	
+	else if (cont==28)
 		begin
 		case (contadd)
 		4'b0001:year<=ADin;
@@ -169,9 +170,6 @@ begin
 		default ADout<=8'hff;
 		endcase
 		cont<=cont+1'b1;
-		end
-	else if (cont==28)
-		begin
 		rd<=1;
 		cont<=cont+1'b1;
 		end
