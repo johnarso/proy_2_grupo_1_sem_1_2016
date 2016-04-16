@@ -45,7 +45,7 @@ module control(
 reg [11:0]contador;
 reg crini;
 reg form;
-reg [20:0]contEdatos;
+reg [3:0]contEdatos;
 reg finref;
 always @(posedge clock)
 	begin
@@ -223,7 +223,7 @@ always @(posedge clock)
 			end
 		
 		else contador<=contador+1'b1;
-		if (contEdatos==2000000)contEdatos<=0;
+		if (contEdatos==10)contEdatos<=0;
 		if(Pcrono==0)ENccrono<=0;
 		
 	end

@@ -46,7 +46,7 @@ reg [8:0]pas3;
 reg [8:0]pas4;
 reg [8:0]pas5;
 reg [8:0]pas6;
-reg [7:0]delay;
+reg [9:0]delay;
 
 always @(posedge clk)
 if (reset)
@@ -148,6 +148,6 @@ else if (delay==0)
 		icr<=pas6[8];
 	delay<=delay+1'b1;
 	end
-	else if(delay==200)delay<=0;
+	else if(delay==1000)delay<=0;
 	else 	delay<=delay+1'b1;
 endmodule
