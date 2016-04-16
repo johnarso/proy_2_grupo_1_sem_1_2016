@@ -125,8 +125,8 @@ begin
 		
 		if (BTup>BTupref)
 		begin
-			if (contador==1&&HC[7:4]==1&&Format==1&&varin==2)varout<=0;
-			else if (contador==1&&HC[7:4]==2&&Format==0&&varin==4)varout<=0;
+			if (contador==1&&HC[7:4]==1&&Format==1&&varin==1)varout<=0;
+			else if (contador==1&&HC[7:4]==2&&Format==0&&varin==3)varout<=0;
 			else if ((contador==1||contador==3||contador==5)&&varin==9)varout<=0;
 			else if (contador==0 && Format==1 && varin==1)
 				begin
@@ -164,8 +164,8 @@ begin
 					varout<=2;
 					HC[3:0]<=0;
 					end
-				else if (contador==1&&HC[7:4]==2&&Format==0)varout<=4;
-				else if (contador==1&&HC[7:4]==1&&Format==1)varout<=2;
+				else if (contador==1&&HC[7:4]==2&&Format==0)varout<=3;
+				else if (contador==1&&HC[7:4]==1&&Format==1)varout<=1;
 				else if (contador==1||contador==3||contador==5)	varout<=9;
 				else if (contador==2||contador==4)varout<=5;
 				end

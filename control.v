@@ -46,11 +46,13 @@ reg [11:0]contador;
 reg crini;
 reg form;
 reg [20:0]contEdatos;
+reg finref;
 always @(posedge clock)
 	begin
 	if (reset)
 	begin
 		hs<=0;
+		finref<=0;
 		ENchora<=0;
 		ENcfecha<=0;
 		ENccrono<=0;
@@ -105,11 +107,12 @@ always @(posedge clock)
 		begin
 		hs<=1;
 		ENcompa<=1;
-		if (cronoini!=crini)
+		if (cronoini!=crini||finref<fin)
 		begin
 			ENcinic<=1;
 			selmuxctr<=1;
 			crini<=cronoini;
+			finref<=fin;
 			contador<=contador+1'b1;
 		end
 		else if ((Phora==1||Pfecha==1)&&lock==0)
@@ -156,7 +159,7 @@ always @(posedge clock)
 				end
 			else contador<=1024;
 			end
-		else if (contador==816)
+		else if (contador==866)
 			begin
 			ENgcrono<=0;
 			contador<=contador+1'b1;

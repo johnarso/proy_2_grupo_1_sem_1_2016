@@ -41,7 +41,7 @@ wire [2:0]Smuxctr;
 inicializacion instini(.clock(clk),.reset(rst),.cs(ctrl1[9]),.ad(ctrl1[11]),.rd(ctrl1[10]),.wr(ctrl1[8]),.ADout(ctrl1[7:0]) );
 
 chcronoformatlock instchcrfolo(.clock(clk),.reset(rst),.enc(ENci), 
-										.inic(SWiniC),.format(SWf),.lock(lck),
+										.inic(SWiniC),.format(SWf),.lock(lck),.fin(final),
 										.ad(ctrl2[11]),.wr(ctrl2[8]),.cs(ctrl2[9]),
 										.rd(ctrl2[10]),.ADout(ctrl2[7:0]) );
 
@@ -71,7 +71,7 @@ CFecha instCFecha(.dia(dt12[23:16]),.mes(dt12[15:8]),.year(dt12[7:0]),.EN(ENcf),
 CHora instCHora(.H(dt11[23:16]),.M(dt11[15:8]),.S(dt11[7:0]),.ampm(ap1),.format(fmt),.EN(ENch),.BTup(arriba),.BTdown(abajo), 
 					.BTl(izq),.BTr(der),.clk(clk),.reset(rst),.HC(dt21[23:16]),.MC(dt21[15:8]),.SC(dt21[7:0]),.AmPm(ap2),.contador(cursghora));
 
-Gcrono instGcrono(.final(final),.swC(ic),.clock(clk),.reset(rst),.chs(ENgc),
+Gcrono instGcrono(.clock(clk),.reset(rst),.chs(ENgc),
 					.ADout(ctrl6[7:0]),.ad(ctrl6[11]),.wr(ctrl6[8]),.rd(ctrl6[10]),.cs(ctrl6[9]) );
 					
 Gfecha instGfecha(.swcr(ic),.form(fmt),.dia(dt22[23:16]),.mes(dt22[15:8]),.year(dt22[7:0]),.clock(clk),.reset(rst),.chs(ENgf),

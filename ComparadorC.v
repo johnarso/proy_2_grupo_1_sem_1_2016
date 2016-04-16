@@ -36,7 +36,7 @@ always @(posedge clock)
 	else if (en)
 		begin
 		if(CprogH==CcountH&&CprogM==CcountM&&CprogS==CcountS&&(CprogH!=0||CprogM!=0||CprogS!=0))fin<=1;
+		else fin<=0;
 		end
-	else fin<=0;
 	end
 endmodule

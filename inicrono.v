@@ -25,13 +25,14 @@ module chcronoformatlock(
 	 input inic,
 	 input format,
 	 input lock,
+	 input fin,
     output reg ad,
     output reg wr,
     output reg cs,
     output reg rd,
     output reg [7:0] ADout
     );
-reg [4:0]cont;
+reg [5:0]cont;
 reg encr;
 always @(posedge clock)
 begin
@@ -45,8 +46,8 @@ begin
 	ADout<=8'hff;
 	cont<=0;
 	end
-
-	else if (0<enc||0<encr)
+	else if (enc>encr)encr<=enc;
+	else if (encr==1)
 	begin
 	if (cont==0)
 	begin
@@ -54,7 +55,6 @@ begin
 	wr<=1;
 	rd<=1;
 	cs<=1;
-	encr<=enc;
 	cont<=cont+1'b1;
 	end
 		
@@ -114,7 +114,8 @@ begin
 		ADout[0]<=0;
 		ADout[1]<=0;
 		ADout[2]<=0;
-		ADout[3]<=inic;
+		if (fin==1)ADout[3]<=0;
+		else ADout[3]<=inic;
 		ADout[4]<=format;
 		ADout[5]<=lock;
 		ADout[6]<=0;

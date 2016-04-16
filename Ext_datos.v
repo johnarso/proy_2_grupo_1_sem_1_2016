@@ -176,6 +176,7 @@ begin
 	else if (cont==29)
 		begin
 		cs<=1;
+		if (min[3:0]==4'b1010)min[3:0]<=4'b1001;
 		cont<=cont+1'b1;
 		end
 	else if (cont==40)

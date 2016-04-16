@@ -53,7 +53,7 @@ begin
 		
 		HCcr<=0;
 		MCcr<=0;
-		SCcr<=0;
+		SCcr<=8'h01;
 		
 		
 	end
