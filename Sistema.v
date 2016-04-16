@@ -39,6 +39,7 @@ module Sistema(
 	 wire PUP;
 	 wire [7:0]ADOUT;
 	 wire r_lent;
+	 wire Handshake;
 	 
 	VGA controlador_vga(
 	.reloj_nexys(CLOCK_NEXYS), .reset_total(switch[5]),
@@ -65,7 +66,8 @@ module Sistema(
 	 .Smuxdt(lugar_program),
 	 .tim(final_cronom),
 	 .Pullup(PUP),
-	 .formato(formato_hora)
+	 .formato(formato_hora),
+	 .handS(Handshake)
     );
 
 assign AD_OUT = (~PUP) ? ADOUT : 8'hzz;

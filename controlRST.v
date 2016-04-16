@@ -27,7 +27,8 @@ module controlRTC(
 	 output [2:0]cursgcrono,cursghora,cursgfecha,
 	 output [1:0]Smuxdt,
 	 output Pullup,tim,
-	 output formato
+	 output formato,
+	 output handS
     );
 wire ENch,ENcf,ENcc,ENgh,ENgf,ENgc,ENed,ENci,ENcomp,lck;
 wire ap1,ap2;
@@ -52,7 +53,7 @@ control instcontrol(.fin(final),.clock(clk),.reset(rst),.Phora(ph),.Pfecha(pf),.
 							.cronoini(ic),.format(fmt),
 						.ENchora(ENch),.ENcfecha(ENcf),.ENccrono(ENcc),.ENghora(ENgh),
 						.ENgfecha(ENgf),.ENgcrono(ENgc),.ENedatos(ENed),
-						.ENcinic(ENci),.ENcompa(ENcomp),.lock(lck),.selmuxdt(Smuxdt),.selmuxctr(Smuxctr)	);
+						.ENcinic(ENci),.ENcompa(ENcomp),.lock(lck),.selmuxdt(Smuxdt),.selmuxctr(Smuxctr),.hs(handS)	);
 
 Ext_datos instExt_datos(.ADin(ADin),.clock(clk),.reset(rst),.chs(ENed),
 								.ADout(ctrl3[7:0]),.ad(ctrl3[11]),.wr(ctrl3[8]),.rd(ctrl3[10]),.cs(ctrl3[9]),.hora(dt11[23:16]),.min(dt11[15:8]),
