@@ -23,42 +23,17 @@ module Generador_RING(
 	 input wire fin_crono,
 	 output reg band_parp
 	 );
-	 
-	 reg [5:0] contador;
-	 reg estado;
-	 reg estado_sig;
-			
-	 
+
 	 always @(posedge CLK_Ring, posedge reset)
 	 begin
 		if (reset)
 		begin
-			contador=6'd0;
-			estado<=0;
-			estado_sig<=1;
+			band_parp=0;
 		end
 		else
 		begin
-		if (fin_crono)
-		 begin
-			estado<=1;
-		 end
-		 else estado_sig<=0;
-		 
-			if (estado)
-			begin
-				if (contador<40)
-				begin
-					contador=contador+6'd1;		
-				end
-				else 
-				begin
-					contador=6'd0;
-					estado<=0;
-				end
-				band_parp=contador[0];				
-			end
-			else band_parp=estado_sig;
+		if (fin_crono) band_parp=~band_parp;
+		else band_parp=0;
 				
 		end
 	 end
