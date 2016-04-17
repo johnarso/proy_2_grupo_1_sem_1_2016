@@ -26,7 +26,8 @@ module Sistema(
 	 output [7:0] AD_OUT,
 	 output [11:0] COLORES,
 	 output H_syncro, V_syncro, 
-	 output R_D, C_S, W_R, A_D
+	 output R_D, C_S, W_R, A_D, 
+	 output [4:0] LED
 	 );
 	 
 	 
@@ -39,17 +40,23 @@ module Sistema(
 	 wire PUP;
 	 wire [7:0]ADOUT;
 	 wire r_lent;
-	 wire Handshake;
+	 wire HS;
+	 wire [4:0] Int_LED;
+	 
+	Interfaz_leds inst_LEDS(
+	.reset(switch[5]), .clk(CLOCK_NEXYS),
+	.leds(Int_LED)
+    );
 	 
 	VGA controlador_vga(
 	.reloj_nexys(CLOCK_NEXYS), .reset_total(switch[5]),
 	.direc_prog(lugar_program),
 	.prog_crono(cursor_crono), .prog_fecha(cursor_fecha), .prog_hora(cursor_hora),
-	.finale(final_cronom), .tempo(am_pm_bandera), .formatto(formato_hora),
-	.h_oro(reloj_hora), .m_oro(reloj_minuto), .s_oro(reloj_segundo), 
-	.giorno(fecha_dia), .messe(fecha_mes), .agno(fecha_anio),
-	.ora(pr_hora), .minute(pr_minuto), .secondo(pr_segundo), 
-	.h_run(crono_hora), .m_run(crono_minuto), .s_run(crono_segundo),
+	.finale(final_cronom), .tempo(am_pm_bandera), .formatto(formato_hora), .handshake(HS),
+	.h_oro_act(reloj_hora), .m_oro_act(reloj_minuto), .s_oro_act(reloj_segundo), 
+	.giorno_act(fecha_dia), .messe_act(fecha_mes), .agno_act(fecha_anio),
+	.ora_act(pr_hora), .minute_act(pr_minuto), .secondo_act(pr_segundo), 
+	.h_run_act(crono_hora), .m_run_act(crono_minuto), .s_run_act(crono_segundo),
 	.color_salida(COLORES),
 	.hsincro(H_syncro), .vsincro(V_syncro)
     );
@@ -67,8 +74,9 @@ module Sistema(
 	 .tim(final_cronom),
 	 .Pullup(PUP),
 	 .formato(formato_hora),
-	 .handS(Handshake)
+	 .handS(HS)
     );
 
 assign AD_OUT = (~PUP) ? ADOUT : 8'hzz;
+assign LED=Int_LED;
 endmodule

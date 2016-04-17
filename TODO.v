@@ -22,8 +22,10 @@ module VGA(
 	input reloj_nexys, reset_total,
 	input [1:0] direc_prog,
 	input [2:0] prog_crono, prog_fecha, prog_hora,
-	input finale, tempo, formatto,
-	input [7:0] h_oro, m_oro, s_oro, giorno, messe, agno, ora, minute, secondo, h_run, m_run, s_run,
+	input finale, tempo, formatto, handshake,
+	input [7:0] h_oro_act, m_oro_act, s_oro_act, 
+	input [7:0] giorno_act, messe_act, agno_act, ora_act, minute_act, secondo_act,
+	input [7:0] h_run_act, m_run_act, s_run_act,
 	output [11:0] color_salida,
 	output hsincro, vsincro
     );
@@ -37,11 +39,21 @@ module VGA(
 	 reg [11:0] rgb_reg;
 	 wire ON_VID;
 	 wire [11:0] colour;
-	 
 	 wire [9:0] x_p, y_p;
-	 
 	 wire medio_seg;
-	
+	 wire [7:0] h_oro, m_oro, s_oro, giorno, messe, agno, ora, minute, secondo, h_run, m_run, s_run;
+	 
+	 
+
+	 HandShake inst_handshake(
+	 .h_oro_a(h_oro_act), .m_oro_a(m_oro_act), .s_oro_a(s_oro_act), 
+	 .giorno_a(giorno_act), .messe_a(messe_act), .agno_a(agno_act), 
+	 .ora_a(ora_act), .minute_a(minute_act), .secondo_a(secondo_act),
+	 .h_run_a(h_run_act), .m_run_a(m_run_act), .s_run_a(s_run_act),
+	 .HS_flag(handshake), .reset(reset_interno), .reloj_nex(reloj_interno),
+	 .h_oro_o(h_oro), .m_oro_o(m_oro), .s_oro_o(s_oro), .giorno_o(giorno), .messe_o(messe), .agno_o(agno),
+	 .ora_o(ora), .minute_o(minute), .secondo_o(secondo), .h_run_o(h_run), .m_run_o(m_run), .s_run_o(s_run)
+    );
 	 
 	 Caracter_selector inst_selector_char(
     .NEXYS_CLOCK(reloj_interno), .clk_parp(medio_seg),
