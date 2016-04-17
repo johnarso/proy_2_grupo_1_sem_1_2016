@@ -153,17 +153,11 @@ always @(posedge clock)
 			begin
 			if(fin==1&&cronoini==0)
 				begin
-				ENgcrono<=1;
-				selmuxctr<=5;
-				contador<=contador+1'b1;
+				contador<=170;
 				end
 			else contador<=1024;
 			end
-		else if (contador==866)
-			begin
-			ENgcrono<=0;
-			contador<=contador+1'b1;
-			end
+		
 		else if(contador==1024)//se comprueba si se desea programar la hora, fecha o cronometro
 		begin
 			if (Phora==1&&lock==1)

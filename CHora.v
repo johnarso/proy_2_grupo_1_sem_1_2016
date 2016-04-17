@@ -46,7 +46,6 @@ module CHora(
 	 reg BTrref;
 	 reg [3:0] varin;
 	 reg [3:0] varout;
-	 
 always @(posedge clk)
 begin
 	if (reset)
@@ -119,9 +118,90 @@ begin
 		
 		else if (step==3)
 		begin
+		
+		if (Format!=format)
+		begin
+			if (format==0)
+				begin
+				if (AmPm==1)
+				begin
+				case (HC)
+				8'h01:HC<=8'h13;
+				8'h02:HC<=8'h14;
+				8'h03:HC<=8'h15;
+				8'h04:HC<=8'h16;
+				8'h05:HC<=8'h17;
+				8'h06:HC<=8'h18;
+				8'h07:HC<=8'h19;
+				8'h08:HC<=8'h20;
+				8'h09:HC<=8'h21;
+				8'h10:HC<=8'h22;
+				8'h11:HC<=8'h23;
+				default HC<=HC;
+				endcase 
+				AmPm<=0;
+				end
+				else if (AmPm==0&&HC==8'h12)HC<=8'h00;
+			end
+			if (format==1)
+				begin
+				case (HC)
+				8'h00:begin
+						HC<=8'h12;
+						AmPm<=0;
+						end
+				8'h13:begin
+						HC<=8'h01;
+						AmPm<=1;
+						end
+				8'h14:begin
+						HC<=8'h02;
+						AmPm<=1;
+						end
+				8'h15:begin
+						HC<=8'h03;
+						AmPm<=1;
+						end
+				8'h16:begin
+						HC<=8'h04;
+						AmPm<=1;
+						end
+				8'h17:begin
+						HC<=8'h05;
+						AmPm<=1;
+						end
+				8'h18:begin
+						HC<=8'h06;
+						AmPm<=1;
+						end
+				8'h19:begin
+						HC<=8'h07;
+						AmPm<=1;
+						end
+				8'h20:begin
+						HC<=8'h08;
+						AmPm<=1;
+						end
+				8'h21:begin
+						HC<=8'h09;
+						AmPm<=1;
+						end
+				8'h22:begin
+						HC<=8'h10;
+						AmPm<=1;
+						end
+				8'h23:begin
+						HC<=8'h11;
+						AmPm<=1;
+						end
+				default HC<=HC;
+				endcase 
+				end
+				Format<=format;
+		end
+		
 		if (BTdown==BTdownref && BTup==BTupref)
 		varout<=varin;
-		
 		
 		if (BTup>BTupref)
 		begin
@@ -158,6 +238,7 @@ begin
 					begin
 					varout<=1;
 					HC[3:0]<=0;
+					AmPm<=~AmPm;
 					end
 				else if (contador==0&&Format==0)
 					begin

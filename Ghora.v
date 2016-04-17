@@ -131,8 +131,10 @@ begin
 		begin
 		case (contadd)
 		3'b000:begin
-				ADout[6:0]<=hora[6:0];
-				ADout[7]<=AmPm;
+				if (hora[6:0]==7'h12&&AmPm==0)ADout[6:0]<=00;
+				else ADout[6:0]<=hora[6:0];
+				if (hora[6:0]==7'h12&&AmPm==1)ADout[7]<=0;
+				else ADout[7]<=AmPm;
 				end
 		3'b001:ADout<=min;
 		3'b010:ADout<=seg;

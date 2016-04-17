@@ -162,9 +162,12 @@ begin
 		4'b0010:mes<=ADin;
 		4'b0011:dia<=ADin;
 		4'b0100:begin
-					hora[6:0]<=ADin[6:0];
+					if (ADin[6:0]==7'h00)hora[6:0]<=7'h12;
+					else hora[6:0]<=ADin[6:0];
 					hora[7]<=0;
-					AmPm<=ADin[7];
+					if (ADin[6:0]==7'h12)AmPm<=1;
+					else AmPm<=ADin[7];
+					
 					end
 		4'b0101:min<=ADin;
 		4'b0110:seg<=ADin;
@@ -179,7 +182,6 @@ begin
 	else if (cont==40)
 		begin
 		cont<=0;
-	//	if (min[3:0]==4'b1010)min[3:0]<=4'b1001;
 		contadd<=contadd+1'b1;
 		end
 	else cont<=cont+1'b1;
