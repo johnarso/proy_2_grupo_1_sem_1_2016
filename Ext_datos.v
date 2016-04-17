@@ -152,6 +152,11 @@ begin
 	
 	else if (cont==28)
 		begin
+		rd<=1;
+		cont<=cont+1'b1;
+		end
+	else if (cont==29)
+		begin
 		case (contadd)
 		4'b0001:year<=ADin;
 		4'b0010:mes<=ADin;
@@ -160,7 +165,6 @@ begin
 					hora[6:0]<=ADin[6:0];
 					hora[7]<=0;
 					AmPm<=ADin[7];
-					hora[7]<=0;
 					end
 		4'b0101:min<=ADin;
 		4'b0110:seg<=ADin;
@@ -169,19 +173,13 @@ begin
 		4'b1001:segcrono<=ADin;
 		default ADout<=8'hff;
 		endcase
-		cont<=cont+1'b1;
-		rd<=1;
-		cont<=cont+1'b1;
-		end
-	else if (cont==29)
-		begin
 		cs<=1;
-		if (min[3:0]==4'b1010)min[3:0]<=4'b1001;
 		cont<=cont+1'b1;
 		end
 	else if (cont==40)
 		begin
 		cont<=0;
+	//	if (min[3:0]==4'b1010)min[3:0]<=4'b1001;
 		contadd<=contadd+1'b1;
 		end
 	else cont<=cont+1'b1;
