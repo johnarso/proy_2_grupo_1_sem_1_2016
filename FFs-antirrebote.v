@@ -148,6 +148,6 @@ else if (delay==0)
 		icr<=pas6[8];
 	delay<=delay+1'b1;
 	end
-	else if(delay==1000)delay<=0;
+	else if(delay==2000)delay<=0;
 	else 	delay<=delay+1'b1;
 endmodule

@@ -130,7 +130,6 @@ begin
 		2'b11:ADout<=8'hff;
 		default ADout<=8'h00;
 	endcase
-		ADout<=8'h00;
 		cont<=cont+1'b1;
 		end
 	else if (cont==28)

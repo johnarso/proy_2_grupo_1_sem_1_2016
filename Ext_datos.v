@@ -23,6 +23,7 @@ module Ext_datos(
 	 input clock,
 	 input reset,
 	 input chs,
+	 input format,
 	 output reg [7:0] ADout,
     output reg ad,
     output reg wr,
@@ -162,10 +163,10 @@ begin
 		4'b0010:mes<=ADin;
 		4'b0011:dia<=ADin;
 		4'b0100:begin
-					if (ADin[6:0]==7'h00)hora[6:0]<=7'h12;
+					if (ADin[6:0]==7'h00&&format==1)hora[6:0]<=7'h12;
 					else hora[6:0]<=ADin[6:0];
 					hora[7]<=0;
-					if (ADin[6:0]==7'h12)AmPm<=1;
+					if (ADin[6:0]==7'h12&&format==1)AmPm<=1;
 					else AmPm<=ADin[7];
 					
 					end

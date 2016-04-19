@@ -78,7 +78,7 @@ always @(posedge clock)
 		selmuxctr<=5;
 		contador<=contador+1'b1;
 		end
-	if (contador==172)
+	if (contador==176)
 		begin
 		ENgcrono<=0;
 		contador<=contador+1'b1;
@@ -154,6 +154,7 @@ always @(posedge clock)
 			if(fin==1&&cronoini==0)
 				begin
 				contador<=170;
+				contEdatos<=0;
 				end
 			else contador<=1024;
 			end
@@ -207,11 +208,11 @@ always @(posedge clock)
 		begin
 			ENghora<=0;
 			ENgfecha<=0;
-			ENgcrono<=0;
 			contador<=contador+1'b1;
 		end
 		else if (contador==1230)//en caso de terminar de guardar, se vuelven al inicio
 			begin
+			lock<=0;
 			contador<=370;
 			contEdatos<=0;
 			end

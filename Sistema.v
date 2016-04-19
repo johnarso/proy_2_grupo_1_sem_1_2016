@@ -27,7 +27,8 @@ module Sistema(
 	 output [11:0] COLORES,
 	 output H_syncro, V_syncro, 
 	 output R_D, C_S, W_R, A_D, 
-	 output [4:0] LED
+	 output [5:0] LED,
+	 output clknex
 	 );
 	 
 	 
@@ -41,7 +42,7 @@ module Sistema(
 	 wire [7:0]ADOUT;
 	 wire r_lent;
 	 wire HS;
-	 wire [4:0] Int_LED;
+	 wire [5:0] Int_LED;
 	 
 	Interfaz_leds inst_LEDS(
 	.reset(switch[5]), .clk(CLOCK_NEXYS),
@@ -79,4 +80,5 @@ module Sistema(
 
 assign AD_OUT = (~PUP) ? ADOUT : 8'hzz;
 assign LED=Int_LED;
+assign clknex=CLOCK_NEXYS;
 endmodule

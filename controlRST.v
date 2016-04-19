@@ -55,7 +55,7 @@ control instcontrol(.fin(final),.clock(clk),.reset(rst),.Phora(ph),.Pfecha(pf),.
 						.ENgfecha(ENgf),.ENgcrono(ENgc),.ENedatos(ENed),
 						.ENcinic(ENci),.ENcompa(ENcomp),.lock(lck),.selmuxdt(Smuxdt),.selmuxctr(Smuxctr),.hs(handS)	);
 
-Ext_datos instExt_datos(.ADin(ADin),.clock(clk),.reset(rst),.chs(ENed),
+Ext_datos instExt_datos(.ADin(ADin),.clock(clk),.reset(rst),.chs(ENed),.format(fmt),
 								.ADout(ctrl3[7:0]),.ad(ctrl3[11]),.wr(ctrl3[8]),.rd(ctrl3[10]),.cs(ctrl3[9]),.hora(dt11[23:16]),.min(dt11[15:8]),
 								.seg(dt11[7:0]),.dia(dt12[23:16]),.mes(dt12[15:8]),.year(dt12[7:0]),.horacrono(horacr),.mincrono(mincr),
 								.segcrono(segcr),.AmPm(ap1),.Pup(Pullup) );

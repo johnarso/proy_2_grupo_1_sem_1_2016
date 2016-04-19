@@ -100,26 +100,9 @@ begin
 		
 		step<=step+1'b1;
 		end
-			
-		else if (step==2)//paso 2
+		else if (step==2)
 			begin
-			case (contador)
-			3'b000: varin<=HC[7:4];
-			3'b001: varin<=HC[3:0];
-			3'b010: varin<=MC[7:4];
-			3'b011: varin<=MC[3:0];
-			3'b100: varin<=SC[7:4];
-			3'b101: varin<=SC[3:0];
-			default varin<=HC[7:4];
-			endcase
-			
-			step<=step+1'b1;
-			end
-		
-		else if (step==3)
-		begin
-		
-		if (Format!=format)
+			if (Format!=format)
 		begin
 			if (format==0)
 				begin
@@ -150,6 +133,7 @@ begin
 						HC<=8'h12;
 						AmPm<=0;
 						end
+				8'h12:AmPm<=1;
 				8'h13:begin
 						HC<=8'h01;
 						AmPm<=1;
@@ -198,7 +182,27 @@ begin
 				endcase 
 				end
 				Format<=format;
-		end
+			end
+			step<=step+1'b1;
+			end
+				
+		else if (step==3)//paso 2
+			begin
+			case (contador)
+			3'b000: varin<=HC[7:4];
+			3'b001: varin<=HC[3:0];
+			3'b010: varin<=MC[7:4];
+			3'b011: varin<=MC[3:0];
+			3'b100: varin<=SC[7:4];
+			3'b101: varin<=SC[3:0];
+			default varin<=HC[7:4];
+			endcase
+			
+			step<=step+1'b1;
+			end
+		
+		else if (step==4)
+		begin
 		
 		if (BTdown==BTdownref && BTup==BTupref)
 		varout<=varin;
@@ -257,7 +261,7 @@ begin
 		step<=step+1'b1;
 		end
 		
-		else if (step==4)
+		else if (step==5)
 		begin
 		case (contador)
 			3'b000: HC[7:4]<=varout;

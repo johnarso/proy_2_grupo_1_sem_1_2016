@@ -20,13 +20,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 module Interfaz_leds(
 	input reset, clk,
-	output reg [4:0] leds
+	output reg [5:0] leds
     );
 	 
 	 always @(posedge reset, posedge clk)
 	 begin
-		if (reset) leds=5'h00;
-		else leds=5'hff;
+		if (reset) leds=6'h00;
+		else leds=6'hff;
 	 end
 	 
 	 
